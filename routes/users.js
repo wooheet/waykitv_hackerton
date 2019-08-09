@@ -59,6 +59,24 @@ router.get('/', function(req, res, next) {
         network: 'testnet'
     };
 
+    let data = {
+      "code": 0,
+      "msg": "success",
+      "data": {
+        "ver": 1,
+        "fees": 10004,
+        "desregid": " ",
+        "money": 100000000,
+        "desaddr": "wZPQNFru7fWVyWqmcFEY6zZ51HudiKA29C",
+        "regid": "1105782-2",
+        "arguments": null,
+        "addr": "wdKQ6tn6AJ7URWdZ3W3UUejsBDRoDq5n9g",
+        "txtype": "COMMON_TX",
+        "hash": "eef4962931ddf809c47377def4d35bcaa71f741a7f4bb71a6c19dbfc8026e07f",
+        "height": 1107498
+      }
+    }
+
     //CONTRACT_TX 4
     // var regAppInfo = {
     //     nTxType: 4,
