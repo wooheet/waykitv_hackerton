@@ -1,18 +1,37 @@
 <template>
   <v-slide-y-transition mode="out-in">
-    <v-layout column >
-      <v-flex mt-5>
-        <v-layout wrap >
-          <v-flex pa-1>
-            <v-flex mb-0 >
-              <v-card class="network-info">
-                <!--<Login class="mt-4" :branchInfo="branchInfo" :linkBase="linkBase"/>-->
-              </v-card>
+    <div v-if="login">
+      <v-layout column >
+        <v-flex mt-5>
+          <v-layout wrap >
+            <v-flex pa-1>
+              <v-flex mb-0 >
+                <v-card class="network-info">
+                  login
+                  <Login class="mt-4"  :linkBase="linkBase"/>
+                </v-card>
+              </v-flex>
             </v-flex>
-          </v-flex>
-        </v-layout>
-      </v-flex>
-    </v-layout>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </div>
+    <div v-if="register">
+      <v-layout column >
+        <v-flex mt-5>
+          <v-layout wrap >
+            <v-flex pa-1>
+              <v-flex mb-0 >
+                <v-card class="network-info">
+                  register
+                  <Login class="mt-4"  :linkBase="linkBase"/>
+                </v-card>
+              </v-flex>
+            </v-flex>
+          </v-layout>
+        </v-flex>
+      </v-layout>
+    </div>
   </v-slide-y-transition>
 </template>
 
@@ -33,8 +52,9 @@ export default {
   computed: {
     ...mapState([
       'blocks',
-      'branchInfo',
-      'loading'
+      'loading',
+      'login',
+      'register'
     ]),
 
     ...mapGetters([

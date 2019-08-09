@@ -14,6 +14,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    login:false,
+    register:false,
     networkHealthy: true,
     accountLoading: false,
     txLoading: false,
@@ -185,6 +187,14 @@ export default new Vuex.Store({
 
     [mTypes.SET_NETWORK] (state, payload) {
       state.networkHealthy = payload
+    },
+
+    [mTypes.SET_LOGIN] (state, payload) {
+      state.login = payload
+    },
+
+    [mTypes.SET_REGISTER] (state, payload) {
+      state.register = payload
     }
   },
 
@@ -209,6 +219,19 @@ export default new Vuex.Store({
 
       }
 
+    },
+
+    async [aTypes.LOGIN] ({ commit, state }) {
+      commit(mTypes.SET_LOGIN, true)
+      commit(mTypes.SET_REGISTER, false)
+      let account = await requestEs.login()
+      console.log(account)
+    },
+
+    async [aTypes.REGISTER] ({ commit, state }) {
+      commit(mTypes.SET_REGISTER, true)
+      commit(mTypes.SET_LOGIN, false)
+      // requestEs.
     },
 
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {

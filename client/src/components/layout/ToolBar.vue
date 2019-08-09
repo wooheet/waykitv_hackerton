@@ -34,20 +34,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import {
-  SET_NOTFOUND_HASH,
-  SET_NOTFOUND_PATH
-} from '../../store/mutation-types'
-import {
-  SEARCH_INPUT_HASH,
-  SEARCH,
+  LOGIN,
+  REGISTER,
 } from '../../store/action-types'
 
 export default {
   computed: {
-    ...mapState([
-      'searchHash', 'searchPath', 'networkHealthy'
-    ]),
-
     ...mapGetters([
       'linkBase'
     ])
@@ -66,20 +58,6 @@ export default {
     submit (e) {
       e.preventDefault()
       this.hash = ''
-      this.$store.dispatch(SEARCH, this.searchHash).then(() => {
-        switch (this.searchPath) {
-          case 'yggdrash-account':
-            // console.log('go to ' + this.searchPath + ' with ' + this.searchHash);
-            this.$router.push(`/yggdrash/account/${this.searchHash}`)
-            break
-
-          default:
-            this.$router.push(`/error/${this.searchHash}`)
-            this.$store.commit(SET_NOTFOUND_HASH, this.searchHash)
-            this.$store.commit(SET_NOTFOUND_PATH, 'hash')
-            break;
-        }
-      })
     },
     text () {
       this.$store.dispatch(SEARCH_INPUT_HASH, this.hash)
