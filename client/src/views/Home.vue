@@ -2,7 +2,7 @@
     <v-slide-y-transition mode="out-in">
       <v-layout column>
         <v-flex mb-3/>
-        <ChainOverview/>
+        <Overview/>
       </v-layout>
     </v-slide-y-transition>
 </template>
@@ -10,14 +10,14 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <script>
   import { mapState, mapGetters } from 'vuex'
-  import ChainOverview from './ChainOverview'
+  import Overview from './Overview'
   import Footer from '../components/layout/Footer'
   import {
     SET_CURRENT_BRANCHE
   } from '../store/mutation-types'
   export default {
     components: {
-      ChainOverview, Footer,
+      Overview, Footer,
     },
 
     computed: {

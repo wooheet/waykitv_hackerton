@@ -37,6 +37,7 @@ router.get("/", async function (req, res) {
 
 });
 
+<<<<<<< HEAD
 
 
 
@@ -73,5 +74,11 @@ function createContractTx() {
 router.use('/account', require('./account'));
 
 
+=======
+router.get("/login", async function (req, res) {
+
+    res.send('login');
+});
+>>>>>>> feature/vue
 
 module.exports = router;

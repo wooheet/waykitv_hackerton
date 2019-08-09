@@ -17,7 +17,9 @@
 //   "sender": "wdKQ6tn6AJ7URWdZ3W3UUejsBDRoDq5n9g"
 // };
 //
-// let raw = api.createSignTransaction(privateKey, 2, txInfo);
+// let raw = api.createSignTr
+//
+// ansaction(privateKey, 2, txInfo);
 //
 // console.log(raw);
 //
