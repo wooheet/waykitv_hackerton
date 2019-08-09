@@ -1,5 +1,3 @@
-
-
 function createTx(accountId, height, contractId, value, message) {
   return {
     nTxType: 4,                 //bitcore.WiccApi.CONTRACT_TX,
@@ -22,13 +20,8 @@ function createGame(accountId, height, script) {
     regAcctId: accountId,      // sender's regId
     script: script,            // contract scrypt content, string or buf
     scriptDesc: "",            // contract scrypt description, string or buf
-    fees: 500000000,           // fees pay for miner
+    fees: 100000000,           // fees pay for miner
   };
-
-
-
-
-
 }
 
 module.exports = {

@@ -9,6 +9,9 @@ const wicc = require('wicc-wallet-lib');
 
 var wiccApi = new wicc.WiccApi({network: 'testnet'});
 
+let roomList = [];
+
+
 router.get('/', async (req, res) => {
   let hostVote = {
     key: constants.VOTE_HOST,
@@ -41,6 +44,9 @@ router.get('/', async (req, res) => {
   res.end();
 });
 
+//77644b5136746e36414a37555257645a3357335555656a734244526f4471356e3967
+
+
 router.post('/hosting', async (req, res) => {
 
   let account = req.body.account;
@@ -52,7 +58,6 @@ router.post('/hosting', async (req, res) => {
     let script = fs.readFileSync(path.join(__dirname, '../../contract/demo.lua') , 'utf8');
     let contractTx = util.createGame(userInfo.data.regid, block.data, script);
 
-    console.log(contractTx);
     // test key
     // var privateKey = wicc.PrivateKey.fromWIF('Y9x4iimB6AYp3b73nRzaJHHZdEHcwb1A61LVyvpXVTgfbbdUj172')
 
@@ -61,6 +66,15 @@ router.post('/hosting', async (req, res) => {
     // console.log(rawTx);
     let txHash = await rest.tx.sendRawTx(rawTx);
     console.log(txHash.data.hash);
+
+    let roomInfo = {
+      host: account,
+      contract: undefined,
+      hash: txHash.data.hash,
+      voter: 0
+    };
+
+    roomList.push(roomInfo);
 
     res.send(txHash.data.hash);
 
@@ -86,7 +100,8 @@ router.get('/number/:hash', async (req, res) => {
     res.status(500).send(e);
   }
 
-})
+});
+
 
 
 router.post('/vote', async (req, res) => {
@@ -113,6 +128,10 @@ router.post('/vote', async (req, res) => {
   } catch (e) {
     console.error(e);
   }
+});
+
+router.get('/rooms', async (req, res) => {
+  res.send(roomList);
 });
 
 
