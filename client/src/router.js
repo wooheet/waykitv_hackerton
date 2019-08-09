@@ -11,38 +11,16 @@ export default new Router({
       path: '/', component: Home
     },
     {
-      path: '/yggdrash',
-      component: () => import('./views/Branch'),
+      path: '/waykitv',
+      component: () => import('./views/Wayki'),
       children: [
         { path: '', component: () => import('./views/ChainOverview') },
         { path: 'blocks', component: () => import('./views/BlockList')},
-        { path: 'blocks/:blockId', component: () => import('./views/BlockDetail') },
-        { path: 'txs', component: () => import('./views/TxList')},
-        { path: 'txs/:txId', component: () => import('./views/TxDetail')},
-        { path: 'contract', component: () => import('./views/Contract') },
-        { path: 'account/:account', component: () => import('./views/AccountDetail')}
-      ]
-    },
-    {
-      path: '/branches', component: () => import('./views/BranchList')
-    },
-    {
-      path: '/branches/:id',
-      component: () => import('./views/Branch'),
-      children: [
-        { path: '', component: () => import('./views/ChainOverview') },
-        { path: 'blocks', component: () => import('./views/BlockList')},
-        { path: 'blocks/:blockId', component: () => import('./views/BlockDetail') },
-        { path: 'txs', component: () => import('./views/TxList')},
-        { path: 'txs/:txId', component: () => import('./views/TxDetail')},
-        { path: 'states', component: () => import('./views/StateList')}
+        { path: 'blocks/:blockId', component: () => import('./views/BlockDetail') }
       ]
     },
     {
       path: '*', component: () => import('./views/NotFoundComponent')
-    },
-    {
-      path: '/error/:hash', component: () => import('./views/NotFoundHashComponent')
     }
   ]
 })

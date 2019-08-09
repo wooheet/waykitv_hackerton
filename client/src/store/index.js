@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import router from '../router'
-import * as request from '../request'
+
 import * as requestEs from '../requestToHub'
 import * as mTypes from './mutation-types'
 import * as aTypes from './action-types'
@@ -15,10 +15,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     networkHealthy: true,
-    accountLoading: true,
-    txLoading: true,
-    blockLoading: true,
-    loading: true,
+    accountLoading: false,
+    txLoading: false,
+    blockLoading: false,
+    loading: false,
     searchHash: '',
     searchPath: '',
     drawer: null,
@@ -189,13 +189,6 @@ export default new Vuex.Store({
   },
 
   actions: {
-    async [aTypes.LOAD_STATES] ({ commit, state }) {
-      const res = await request.getStates(state.currentBranch.id)
-      let payload = res.data
-      console.debug(payload);
-      commit(mTypes.SET_STATES, payload)
-    },
-
     async [aTypes.LOAD_ALL_DATA] ({ commit, state }) {
       try {
         const res = await requestEs.getAllData();
@@ -457,24 +450,8 @@ export default new Vuex.Store({
     loading(state) {
       return state.loading
     },
-
-    isStem(state) {
-      return state.currentBranch.name === 'STEM'
-    },
-
     linkBase() {
-      return `/yggdrash`
-    },
-
-    countOfBranches(state) {
-      return Object.keys(state.branches).length
-    },
-
-    branchesExcludeStem(state) {
-      return state.branches.filter(b => {
-        return b.name !== "STEM"
-      })
-    },
-  },
-  // plugins: [wsPlugin]
+      return `/waykitv`
+    }
+  }
 })

@@ -3,39 +3,7 @@
       <v-container class="py-0" style="max-width: 1440px; margin:auto;">
         <v-layout row align-center>
           <v-flex md2 xs1 class="hidden-sm-and-down logo mt-3">
-            <img :src="require(`@/assets/logo.svg`)" alt="logo" @click="goHome" style="cursor: pointer;">
-          </v-flex>
-          <v-flex md2 xs1 class="hidden-md-and-up logo mr-3 mt-3">
-            <img :src="require(`@/assets/logo_single.svg`)" alt="logo_single" @click="goHome" style="cursor: pointer;">
-          </v-flex>
-          <v-flex xs5 class="hidden-sm-and-down mt-2">
-            <span class="menu mr-5" @click="goBlocks">
-              BLOCKS
-            </span>
-            <span class="menu mr-5" @click="goTransactions">
-              TRANSACTIONS
-            </span>
-            <span class="menu" @click="goDocs">
-              DOCS
-            </span>
-          </v-flex>
-          <v-flex >
-            <div class="network mt-3 mr-2" v-if="networkHealthy === true">
-              <span class="healthy mr-2">
-                ●
-              </span>
-              <span class="white--text hidden-sm-and-down">
-                Network health
-              </span>
-            </div>
-            <div class="network mt-3 mr-2" v-else>
-              <span class="notHealthy mr-2">
-                ●
-              </span>
-              <span class="white--text hidden-sm-and-down">
-                Network health
-              </span>
-            </div>
+            <img :src="require(`@/assets/waykilogo.png`)" alt="logo" @click="goHome" style="cursor: pointer;">
           </v-flex>
           <v-flex>
             <v-form @submit.prevent="submit" style="float:right">
@@ -45,33 +13,12 @@
                 @input="text"
                 counter="130"
                 hide-details
-                placeholder="Block # or Hash / TX Hash / Account "
+                placeholder="Account "
                 append-icon="search"
                 @click:append="submit"
               ></v-text-field>
             </v-form>
           </v-flex>
-          <v-menu xs2 class="hidden-md-and-up">
-            <v-toolbar-side-icon slot="activator" style="float: right; color: white"></v-toolbar-side-icon>
-              <v-list class="pt-0"
-                      two-line subheader
-              >
-                <v-divider></v-divider>
-                <v-list-tile class="pt-3"
-                             v-for="item in items"
-                             :key="item.title"
-                             @click="goTo(item.path)"
-                             link>
-                  <v-list-tile-avatar>
-                    <v-icon :class="[item.iconClass]">{{ item.icon }}</v-icon>
-                  </v-list-tile-avatar>
-
-                  <v-list-tile-content>
-                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                  </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-          </v-menu>
         </v-layout>
       </v-container>
     </v-toolbar>
@@ -105,30 +52,13 @@ export default {
       hash: '',
       items: [
         { title: 'Blocks', icon: 'question_answer', path: '/yggdrash/blocks' },
-        { title: 'Transactions', icon: 'question_answer', path: '/yggdrash/txs' }
       ]
     }
   },
 
   methods: {
-    goTo (path) {
-      this.$router.push(path)
-      this.$store.commit(TOGGLE_DRAWER)
-    },
     goHome () {
       this.$router.push('/')
-    },
-    goBlocks () {
-      this.$router.push('/yggdrash/blocks')
-    },
-    goTransactions () {
-      this.$router.push('/yggdrash/txs')
-    },
-    goDocs () {
-      window.open('https://developers.yggdrash.io/ko/guide/test-net.html', '_blank')
-    },
-    toggleDrawer () {
-      this.$store.commit(TOGGLE_DRAWER)
     },
     submit (e) {
       e.preventDefault()
@@ -171,18 +101,7 @@ export default {
       this.$store.dispatch(SEARCH_INPUT_HASH, this.hash)
     }
 
-  },
-  created () {
-    setInterval(()=> {
-      this.$store.dispatch(NETWORK_HEALTH_CHECK);
-    }, 3000)
-  },
-
-  mounted () {
-    //TODO: 한번만 실행
-    // this.$store.dispatch(NETWORK_HEALTH_CHECK)
-
-  },
+  }
 }
 </script>
 

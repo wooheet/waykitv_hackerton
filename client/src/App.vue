@@ -2,7 +2,7 @@
   <v-app>
     <Toolbar></Toolbar>
     <template>
-      <v-content :class="randomBackground()">
+      <v-content class="contents">
         <v-container fluid>
           <router-view/>
         </v-container>
@@ -80,28 +80,8 @@ export default {
     max-width: 1440px;
   }
   /*TODO: Fix me ex) for*/
-  .contents1 {
-    background-image: url("assets/images/back1.jpg");
-    background-size: cover;
-  }
-  .contents2 {
-    background-image: url("assets/images/back2.jpg");
-    background-size: cover;
-  }
-  .contents3 {
-    background-image: url("assets/images/back3.jpg");
-    background-size: cover;
-  }
-  .contents4 {
-    background-image: url("assets/images/back4.jpg");
-    background-size: cover;
-  }
-  .contents5 {
-    background-image: url("assets/images/back5.jpg");
-    background-size: cover;
-  }
-  .contents6 {
-    background-image: url("assets/images/back6.jpg");
+  .contents {
+    background-image: url("assets/images/back.jpg");
     background-size: cover;
   }
 
