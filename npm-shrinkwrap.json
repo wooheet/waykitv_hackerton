@@ -127,6 +127,11 @@
         }
       }
     },
+    "aes-js": {
+      "version": "3.1.2",
+      "resolved": "https://registry.npmjs.org/aes-js/-/aes-js-3.1.2.tgz",
+      "integrity": "sha512-e5pEa2kBnBOgR4Y/p20pskXI74UEz7de8ZGVo58asOtvSVG5YAbJeELPZxOmt+Bnz3rX753YKhfIn4X4l1PPRQ=="
+    },
     "ajv": {
       "version": "6.10.0",
       "resolved": "https://registry.npmjs.org/ajv/-/ajv-6.10.0.tgz",
@@ -605,6 +610,11 @@
         "create-hash": "^1.1.0",
         "safe-buffer": "^5.1.2"
       }
+    },
+    "buffer-compare": {
+      "version": "1.1.1",
+      "resolved": "https://registry.npmjs.org/buffer-compare/-/buffer-compare-1.1.1.tgz",
+      "integrity": "sha1-W+e+hTr4kZjR9N3AkNHWakiu9ZY="
     },
     "buffer-xor": {
       "version": "1.0.3",
@@ -1166,6 +1176,11 @@
       "version": "1.2.0",
       "resolved": "https://registry.npmjs.org/decamelize/-/decamelize-1.2.0.tgz",
       "integrity": "sha1-9lNNFRSCabIDUue+4m9QH5oZEpA="
+    },
+    "decimal": {
+      "version": "0.0.2",
+      "resolved": "https://registry.npmjs.org/decimal/-/decimal-0.0.2.tgz",
+      "integrity": "sha1-GUPsUjaKD996NywsEM8fy8kbk+M="
     },
     "decode-uri-component": {
       "version": "0.2.0",
@@ -4458,6 +4473,16 @@
       "resolved": "https://registry.npmjs.org/scrypt-async/-/scrypt-async-2.0.1.tgz",
       "integrity": "sha512-wHR032jldwZNy7Tzrfu7RccOgGf8r5hyDMSP2uV6DpLiBUsR8JsDcx/in73o2UGVVrH5ivRFdNsFPcjtl3LErQ=="
     },
+    "scrypt-js": {
+      "version": "2.0.4",
+      "resolved": "https://registry.npmjs.org/scrypt-js/-/scrypt-js-2.0.4.tgz",
+      "integrity": "sha512-4KsaGcPnuhtCZQCxFxN3GVYIhKFPTdLd8PLC552XwbMndtD0cjRFAhDuuydXQ0h08ZfPgzqe6EKHozpuH74iDw=="
+    },
+    "scryptsy": {
+      "version": "2.1.0",
+      "resolved": "https://registry.npmjs.org/scryptsy/-/scryptsy-2.1.0.tgz",
+      "integrity": "sha512-1CdSqHQowJBnMAFyPEBRfqag/YP9OF394FV+4YREIJX4ljD7OxvQRDayyoyyCk+senRjSkP6VnUNQmVQqB6g7w=="
+    },
     "secp256k1": {
       "version": "3.7.1",
       "resolved": "https://registry.npmjs.org/secp256k1/-/secp256k1-3.7.1.tgz",
@@ -5161,6 +5186,11 @@
         "crypto-random-string": "^1.0.0"
       }
     },
+    "unorm": {
+      "version": "1.6.0",
+      "resolved": "https://registry.npmjs.org/unorm/-/unorm-1.6.0.tgz",
+      "integrity": "sha512-b2/KCUlYZUeA7JFUuRJZPUtr4gZvBh7tavtv4fvk4+KV9pfGiR6CQAQAWl49ZpR3ts2dk4FYkP7EIgDJoiOLDA=="
+    },
     "unpipe": {
       "version": "1.0.0",
       "resolved": "https://registry.npmjs.org/unpipe/-/unpipe-1.0.0.tgz",
@@ -5341,6 +5371,51 @@
       "version": "2.0.0",
       "resolved": "https://registry.npmjs.org/which-module/-/which-module-2.0.0.tgz",
       "integrity": "sha1-2e8H3Od7mQK4o6j6SzHD4/fm6Ho="
+    },
+    "wicc-wallet-lib": {
+      "version": "1.0.3",
+      "resolved": "https://registry.npmjs.org/wicc-wallet-lib/-/wicc-wallet-lib-1.0.3.tgz",
+      "integrity": "sha512-U8epGwM5JeSz3NqbEvfJrfD7oHYQ3Qg60iPHHJOyfL2Th8JLtdo1l0TffDMh1m1OutgdT4NJmGcpx4LdtbaecA==",
+      "requires": {
+        "aes-js": "^3.1.1",
+        "bn.js": "=4.11.8",
+        "bs58": "=4.0.1",
+        "buffer-compare": "=1.1.1",
+        "crypto-js": "^3.1.9-1",
+        "decimal": "0.0.2",
+        "elliptic": "=6.4.0",
+        "inherits": "=2.0.1",
+        "lodash": "=4.17.5",
+        "scrypt-js": "^2.0.3",
+        "scryptsy": "^2.0.0",
+        "unorm": "^1.4.1"
+      },
+      "dependencies": {
+        "elliptic": {
+          "version": "6.4.0",
+          "resolved": "https://registry.npmjs.org/elliptic/-/elliptic-6.4.0.tgz",
+          "integrity": "sha1-ysmvh2LIWDYYcAPI3+GT5eLq5d8=",
+          "requires": {
+            "bn.js": "^4.4.0",
+            "brorand": "^1.0.1",
+            "hash.js": "^1.0.0",
+            "hmac-drbg": "^1.0.0",
+            "inherits": "^2.0.1",
+            "minimalistic-assert": "^1.0.0",
+            "minimalistic-crypto-utils": "^1.0.0"
+          }
+        },
+        "inherits": {
+          "version": "2.0.1",
+          "resolved": "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz",
+          "integrity": "sha1-sX0I0ya0Qj5Wjv9xn5GwscvfafE="
+        },
+        "lodash": {
+          "version": "4.17.5",
+          "resolved": "https://registry.npmjs.org/lodash/-/lodash-4.17.5.tgz",
+          "integrity": "sha512-svL3uiZf1RwhH+cWrfZn3A4+U58wbP0tGVTLQPbjplZxZ8ROD9VLuNgsRniTlLe7OlSqR79RUehXgpBW/s0IQw=="
+        }
+      }
     },
     "widest-line": {
       "version": "2.0.1",

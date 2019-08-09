@@ -31,8 +31,6 @@ var bitcore = require('wicc-wallet-lib');
 
 var privateKey = bitcore.PrivateKey.fromWIF('Y9x4iimB6AYp3b73nRzaJHHZdEHcwb1A61LVyvpXVTgfbbdUj172')
 
-// var privateKey = "";
-
 var arg = {network: 'testnet'}
 var wiccApi = new bitcore.WiccApi(arg)
 
@@ -81,3 +79,36 @@ commonTx._Signtx(privateKey);
 
 var hex = commonTx.SerializeTx(privateKey)
 console.log(hex)
+
+let t = "Hello";
+
+console.log(toHex(t));
+
+function toHex(str) {
+  var result = '';
+  for (var i=0; i<str.length; i++) {
+    result += str.charCodeAt(i).toString(16);
+  }
+  return result;
+}
+
+var myBuffer = [];
+
+var buffer = new Buffer(t, 'utf16le');
+for (var i = 0; i < buffer.length; i++) {
+  myBuffer.push(buffer[i]);
+}
+
+console.log(myBuffer);
+
+
+
+// Wallet
+// let strMne = api.createAllCoinMnemonicCode()
+let strMne = 'such account wise drink slab any figure throw neither estate art series'
+// //Check if the mnemonic is valid
+api.checkMnemonicCode(strMne)
+let address = api.getAddressFromMnemonicCode(strMne)
+let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(strMne))
+// let address2 = privateKey.toAddress();
+let walletInfo = api.createWallet(strMne, password)

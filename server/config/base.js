@@ -123,6 +123,6 @@ module.exports = {
     agendaTimer: "one minute",
 
     wayki: {
-        host : "https://baas-test.wiccdev.org/v2/api/"
+        host : "https://baas-test.wiccdev.org/v2/api"
     }
 };
