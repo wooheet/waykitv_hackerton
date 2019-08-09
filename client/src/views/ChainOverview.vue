@@ -7,36 +7,14 @@
   <div v-else>
     <v-slide-y-transition mode="out-in">
       <v-layout column >
-        <v-flex>
+        <v-flex mt-5>
           <v-layout wrap >
-            <v-flex sm12 md6 pa-1>
+            <v-flex pa-1>
               <v-flex mb-0 >
                 <v-card class="network-info">
-                  <span class="title font-weight-medium mb-5 ml-3 white--text">NETWORK INFO </span>
                   <BranchInfo class="mt-4" :branchInfo="branchInfo" :linkBase="linkBase"/>
                 </v-card>
               </v-flex>
-            </v-flex>
-            <v-flex sm12 md6 pa-1>
-              <v-card dark class="opacity">
-                <v-layout row wrap>
-                  <v-flex sm11>
-                    <span class="title font-weight-medium mb-2 ml-3 white--text">MOST RECENT BLOCKS</span>
-                  </v-flex>
-                  <v-flex>
-                    <v-btn small icon class="refresh" @click="refreshBlcok()">
-                      <v-icon>
-                        refresh
-                      </v-icon>
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
-                <RecentBlockWidget :blocks="blocks" :linkBase="linkBase"/>
-                <div class="text-xs-center">
-                  <v-btn round flat :to="`${linkBase}/blocks`">
-                    View All</v-btn>
-                </div>
-              </v-card>
             </v-flex>
           </v-layout>
         </v-flex>
@@ -52,8 +30,6 @@ import RecentBlockWidget from '../components/RecentBlockWidget'
 import BranchInfo from '../components/BranchInfo'
 import {
   LOAD_BLOCKS,
-  LOAD_TXS,
-  LOAD_CHART
 } from '../store/action-types'
 
 export default {
@@ -64,17 +40,9 @@ export default {
   computed: {
     ...mapState([
       'blocks',
-      'currentBranch',
-      'branches',
       'branchInfo',
-      'txs',
-      'countOfTxs',
       'loading'
     ]),
-
-    ...mapState({
-      chart: 'weeklyTxCounts'
-    }),
 
     ...mapGetters([
       'linkBase'
@@ -82,20 +50,14 @@ export default {
   },
 
   methods: {
-
     refreshBlcok () {
       this.$store.dispatch(LOAD_BLOCKS)
     },
-    refreshTx () {
-      this.$store.dispatch(LOAD_TXS, true)
-    }
   },
 
   watch: {
     '$route' (to) {
       this.$store.dispatch(LOAD_BLOCKS)
-      this.$store.dispatch(LOAD_TXS, false)
-      this.$store.dispatch(LOAD_CHART)
     },
   },
 }

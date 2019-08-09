@@ -2,10 +2,10 @@
     <v-toolbar absolute fixed app bottom flat height="70px">
       <v-container class="py-0" style="max-width: 1440px; margin:auto;">
         <v-layout row align-center>
-          <v-flex md2 xs1 class="hidden-sm-and-down logo mt-3">
+          <v-flex md2 xs1 class="mt-4">
             <img :src="require(`@/assets/waykilogo.png`)" alt="logo" @click="goHome" style="cursor: pointer;">
           </v-flex>
-          <v-flex>
+          <v-flex xs5 class="hidden-sm-and-down mt-2">
             <v-form @submit.prevent="submit" style="float:right">
               <v-text-field
                 dark
@@ -19,6 +19,14 @@
               ></v-text-field>
             </v-form>
           </v-flex>
+          <v-flex>
+            <span class="menu mr-3 mt-2" style="float: right">
+              LOGIN
+            </span>
+            <span class="menu mr-5 mt-2" style="float: right">
+              REGISTER
+            </span>
+          </v-flex>
         </v-layout>
       </v-container>
     </v-toolbar>
@@ -26,14 +34,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import {
-  TOGGLE_DRAWER,
   SET_NOTFOUND_HASH,
   SET_NOTFOUND_PATH
 } from '../../store/mutation-types'
 import {
   SEARCH_INPUT_HASH,
   SEARCH,
-  NETWORK_HEALTH_CHECK
 } from '../../store/action-types'
 
 export default {
@@ -45,15 +51,6 @@ export default {
     ...mapGetters([
       'linkBase'
     ])
-  },
-
-  data () {
-    return {
-      hash: '',
-      items: [
-        { title: 'Blocks', icon: 'question_answer', path: '/yggdrash/blocks' },
-      ]
-    }
   },
 
   methods: {
@@ -69,26 +66,7 @@ export default {
             // console.log('go to ' + this.searchPath + ' with ' + this.searchHash);
             this.$router.push(`/yggdrash/account/${this.searchHash}`)
             break
-          case 'yggdrash-block':
-            // console.log('go to ' + this.searchPath + ' with ' + this.searchHash);
-            this.$router.push(`/yggdrash/blocks/${this.searchHash}`)
-            break
-          case 'yggdrash-tx':
-            // console.log('go to ' + this.searchPath + ' with ' + this.searchHash);
-            this.$router.push(`/yggdrash/txs/${this.searchHash}`)
-            break
-          case 'nothing_to_do':
-            break
-          case 'invalid-format':
-            this.$router.push(`/error/${this.searchHash}`)
-            this.$store.commit(SET_NOTFOUND_HASH, this.searchHash)
-            this.$store.commit(SET_NOTFOUND_PATH, 'format')
-            break;
-          case 'not_found':
-            this.$router.push(`/error/${this.searchHash}`)
-            this.$store.commit(SET_NOTFOUND_HASH, this.searchHash)
-            this.$store.commit(SET_NOTFOUND_PATH, 'hash')
-            break;
+
           default:
             this.$router.push(`/error/${this.searchHash}`)
             this.$store.commit(SET_NOTFOUND_HASH, this.searchHash)
@@ -120,10 +98,6 @@ export default {
     cursor: pointer;
   }
 
-  .menu:hover {
-    color: #9EFFE8;
-    transform: scaleX( 2.5 ) scaleY( 1.5 );
-  }
   .v-toolbar {
     height: 70px;
     background: rgba(0, 15, 14, 0);
@@ -192,5 +166,9 @@ export default {
       width: 250px;
       margin-right: 10px;
     }
+  }
+
+  .v-text-field {
+    width:300px;
   }
 </style>
