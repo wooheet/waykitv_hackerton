@@ -14,7 +14,7 @@ export default new Router({
       path: '/waykitv',
       component: () => import('./views/Wayki'),
       children: [
-        { path: '', component: () => import('./views/ChainOverview') },
+        { path: '', component: () => import('./views/Overview') },
         { path: 'blocks', component: () => import('./views/BlockList')},
         { path: 'blocks/:blockId', component: () => import('./views/BlockDetail') }
       ]

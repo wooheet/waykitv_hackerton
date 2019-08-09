@@ -3,7 +3,7 @@
       <v-container class="py-0" style="max-width: 1440px; margin:auto;">
         <v-layout row align-center>
           <v-flex md2 xs1 class="mt-4">
-            <img :src="require(`@/assets/waykilogo.png`)" alt="logo" @click="goHome" style="cursor: pointer;">
+            <img :src="require(`@/assets/wayki.png`)" alt="logo" @click="goHome" style="cursor: pointer;">
           </v-flex>
           <v-flex xs5 class="hidden-sm-and-down mt-2">
             <v-form @submit.prevent="submit" style="float:right">
@@ -20,10 +20,10 @@
             </v-form>
           </v-flex>
           <v-flex>
-            <span class="menu mr-3 mt-2" style="float: right">
+            <span class="menu mr-3 mt-2" style="float: right" @click="login">
               LOGIN
             </span>
-            <span class="menu mr-5 mt-2" style="float: right">
+            <span class="menu mr-5 mt-2" style="float: right" @click="register">
               REGISTER
             </span>
           </v-flex>
@@ -56,6 +56,12 @@ export default {
   methods: {
     goHome () {
       this.$router.push('/')
+    },
+    login () {
+      this.$store.dispatch(LOGIN)
+    },
+    register () {
+      this.$store.dispatch(REGISTER)
     },
     submit (e) {
       e.preventDefault()

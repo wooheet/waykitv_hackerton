@@ -1,33 +1,26 @@
 <template>
-  <div v-if="loading">
-    <v-container fill-height grid-list-xs mt-5 class="text-xs-center">
-      <img src="@/assets/images/loading.svg" style="margin: 0 auto">
-    </v-container>
-  </div>
-  <div v-else>
-    <v-slide-y-transition mode="out-in">
-      <v-layout column >
-        <v-flex mt-5>
-          <v-layout wrap >
-            <v-flex pa-1>
-              <v-flex mb-0 >
-                <v-card class="network-info">
-                  <BranchInfo class="mt-4" :branchInfo="branchInfo" :linkBase="linkBase"/>
-                </v-card>
-              </v-flex>
+  <v-slide-y-transition mode="out-in">
+    <v-layout column >
+      <v-flex mt-5>
+        <v-layout wrap >
+          <v-flex pa-1>
+            <v-flex mb-0 >
+              <v-card class="network-info">
+                <!--<Login class="mt-4" :branchInfo="branchInfo" :linkBase="linkBase"/>-->
+              </v-card>
             </v-flex>
-          </v-layout>
-        </v-flex>
-      </v-layout>
-    </v-slide-y-transition>
-  </div>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
+  </v-slide-y-transition>
 </template>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <script>
 import { mapState, mapGetters } from 'vuex'
 import RecentBlockWidget from '../components/RecentBlockWidget'
-import BranchInfo from '../components/BranchInfo'
+import Login from '../components/Login'
 import {
   LOAD_BLOCKS,
 } from '../store/action-types'
@@ -35,7 +28,7 @@ import {
 export default {
   components: {
     RecentBlockWidget,
-    BranchInfo,
+    Login,
   },
   computed: {
     ...mapState([
