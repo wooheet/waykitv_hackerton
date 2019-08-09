@@ -3,30 +3,18 @@
     <v-container class="py-4" style="max-width: 1440px; margin:auto;">
       <v-flex text-xs-right white--text>
         <span class="ml-1 mr-4 sns" >
-          <a href="https://yggdrash.io" target="_blank">
-            <img :src="require(`@/assets/yggdrash.png`)" alt="yggdrash"></a>
-        </span>
-        <span class="ml-1 mr-4 sns" >
-          <a href="https://github.com/yggdrash" target="_blank">
+          <a href="https://github.com/WaykiChain" target="_blank">
             <img :src="require(`@/assets/github.png`)" alt="github"></a>
         </span>
         <span class="ml-1 mr-4 sns" >
-          <a href="https://medium.com/yggdrash" target="_blank">
-            <img :src="require(`@/assets/media.png`)" alt="media"></a>
-        </span>
-        <span class="ml-1 mr-4 sns" >
-          <a href="https://t.me/yggdrash" target="_blank">
-            <img :src="require(`@/assets/telegram.png`)" alt="telegram"></a>
-        </span>
-        <span class="ml-1 mr-4 sns" >
-          <a href="https://www.facebook.com/yggdrash/" target="_blank">
+          <a href="https://www.facebook.com/waykichainofficial/" target="_blank">
             <img :src="require(`@/assets/facebook.png`)" alt="facebook"></a>
         </span>
         <span class="ml-1 mr-5 sns" >
-          <a href="https://twitter.com/YggdrashNews" target="_blank">
+          <a href="https://twitter.com/wayki_chain" target="_blank">
             <img :src="require(`@/assets/twitter.png`)" alt="twitter"></a>
         </span>
-        <strong class="footer">Copyright © 2019 YGGDRASH All Rights Reserved.</strong>
+        <strong class="footer">Copyright © 2019 WAYKITV All Rights Reserved.</strong>
       </v-flex>
     </v-container>
   </v-footer>

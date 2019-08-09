@@ -38,9 +38,6 @@ router.get("/", async function (req, res) {
 });
 
 
-
-
-
 function createCommonTx() {
   return {
     nTxType: 3,

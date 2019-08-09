@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import router from '../router'
-import * as request from '../request'
+
 import * as requestEs from '../requestToHub'
 import * as mTypes from './mutation-types'
 import * as aTypes from './action-types'
@@ -14,11 +14,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    login:false,
+    register:false,
     networkHealthy: true,
-    accountLoading: true,
-    txLoading: true,
-    blockLoading: true,
-    loading: true,
+    accountLoading: false,
+    txLoading: false,
+    blockLoading: false,
+    loading: false,
     searchHash: '',
     searchPath: '',
     drawer: null,
@@ -185,17 +187,18 @@ export default new Vuex.Store({
 
     [mTypes.SET_NETWORK] (state, payload) {
       state.networkHealthy = payload
+    },
+
+    [mTypes.SET_LOGIN] (state, payload) {
+      state.login = payload
+    },
+
+    [mTypes.SET_REGISTER] (state, payload) {
+      state.register = payload
     }
   },
 
   actions: {
-    async [aTypes.LOAD_STATES] ({ commit, state }) {
-      const res = await request.getStates(state.currentBranch.id)
-      let payload = res.data
-      console.debug(payload);
-      commit(mTypes.SET_STATES, payload)
-    },
-
     async [aTypes.LOAD_ALL_DATA] ({ commit, state }) {
       try {
         const res = await requestEs.getAllData();
@@ -216,6 +219,19 @@ export default new Vuex.Store({
 
       }
 
+    },
+
+    async [aTypes.LOGIN] ({ commit, state }) {
+      commit(mTypes.SET_LOGIN, true)
+      commit(mTypes.SET_REGISTER, false)
+      let account = await requestEs.login()
+      console.log("store", account)
+    },
+
+    async [aTypes.REGISTER] ({ commit, state }) {
+      commit(mTypes.SET_REGISTER, true)
+      commit(mTypes.SET_LOGIN, false)
+      // requestEs.
     },
 
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {
@@ -457,24 +473,8 @@ export default new Vuex.Store({
     loading(state) {
       return state.loading
     },
-
-    isStem(state) {
-      return state.currentBranch.name === 'STEM'
-    },
-
     linkBase() {
-      return `/yggdrash`
-    },
-
-    countOfBranches(state) {
-      return Object.keys(state.branches).length
-    },
-
-    branchesExcludeStem(state) {
-      return state.branches.filter(b => {
-        return b.name !== "STEM"
-      })
-    },
-  },
-  // plugins: [wsPlugin]
+      return `/waykitv`
+    }
+  }
 })
