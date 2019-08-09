@@ -1,0 +1,45 @@
+.mytable .theme--dark.v-table {
+  background-color: rgba(66, 66, 66, 0);
+}
+
+.mytable .theme--dark.v-table thead th {
+  color: #83AFA5;
+  font-weight: bold;
+}
+
+.mytable .v-datatable__actions {
+  background-color: rgba(66, 66, 66, 0) !important;
+}
+
+.index {
+  color:white;
+}
+
+.index:hover {
+  color: white !important;
+  text-decoration: underline !important;
+}
+
+.account {
+  color:white;
+  background-color: rgba(255, 255, 255, 0.3);
+  padding:5px;
+  border-radius: 5px;
+}
+
+.account:hover {
+  color: white !important;
+  background-color: #4F776D;
+}
+
+.account-to {
+  color:white !important;
+  background: rgba(255, 255, 255, 0.08);
+  padding:5px;
+  border-radius: 5px;
+}
+
+.account-to:hover {
+  color: white;
+  background-color: #4F776D;
+}
