@@ -7,8 +7,26 @@
             <v-flex pa-1>
               <v-flex mb-0 >
                 <v-card class="network-info">
-                  login
-                  <Login class="mt-4"  :linkBase="linkBase"/>
+                  <div class="branch-detail ml-3 white--text">
+                    <v-layout wrap class="py-2">
+                      <v-flex>
+                        <v-form @submit.prevent="submit">
+                          <v-text-field
+                            dark
+                            class="passwordInput"
+                            v-model="inputPassword"
+                            counter="130"
+                            hide-details
+                            placeholder="PASSWORD"
+                            @click:append="submit"
+                          ></v-text-field>
+                        </v-form>
+                        <div style="margin-top: 20px;">
+                          <button v-on:click="loginNext()"> NEXT</button>
+                        </div>
+                      </v-flex>
+                    </v-layout>
+                  </div>
                 </v-card>
               </v-flex>
             </v-flex>
@@ -23,8 +41,53 @@
             <v-flex pa-1>
               <v-flex mb-0 >
                 <v-card class="network-info">
-                  register
-                  <Login class="mt-4"  :linkBase="linkBase"/>
+                  <div class="ml-3 white--text" >
+                    <v-layout wrap class="py-2" style="margin-left:400px;">
+                      <div v-if="passwordView">
+                        <v-flex>
+                          <v-form @submit.prevent="submit">
+                            <v-text-field
+                              dark
+                              class="passwordInput"
+                              v-model="inputPassword"
+                              counter="130"
+                              hide-details
+                              placeholder="PASSWORD"
+                              @click:append="submit"
+                            ></v-text-field>
+                          </v-form>
+                          <div style="margin-top: 20px;">
+                            <button v-on:click="next()"> NEXT</button>
+                          </div>
+                        </v-flex>
+                      </div>
+                      <div v-if="register_step1">
+                        <v-flex xs12 sm2 mb-2 fluid class="props">MNEMONIC</v-flex>
+                        <v-flex xs12 sm10 xsAndDown class="font-weight-regular value">{{mnemonic}}</v-flex>
+                        <div style="margin-top: 20px;">
+                           <button v-on:click="next2()"> NEXT</button>
+                        </div>
+                      </div>
+                      <div v-if="register_step2">
+                        <v-flex xs12 sm2 mb-1 fluid class="props">Address</v-flex>
+                        <v-flex xs12 sm10 xsAndDown class="font-weight-regular value">{{address}}</v-flex>
+                        <v-form @submit.prevent="submit2">
+                          <v-text-field
+                            dark
+                            class="passwordInput"
+                            v-model="inputMnemonic"
+                            counter="130"
+                            hide-details
+                            placeholder="MNEMONIC"
+                            @click:append="submit2"
+                          ></v-text-field>
+                        </v-form>
+                        <div style="margin-top: 20px;">
+                          <button v-on:click="next3()"> NEXT</button>
+                        </div>
+                      </div>
+                    </v-layout>
+                  </div>
                 </v-card>
               </v-flex>
             </v-flex>
@@ -42,6 +105,10 @@ import RecentBlockWidget from '../components/RecentBlockWidget'
 import Login from '../components/Login'
 import {
   LOAD_BLOCKS,
+  LOGIN_STEP1,
+  REGISTER_STEP1,
+  REGISTER_STEP2,
+  REGISTER_STEP3
 } from '../store/action-types'
 
 export default {
@@ -54,7 +121,14 @@ export default {
       'blocks',
       'loading',
       'login',
-      'register'
+      'register',
+      'address',
+      'walletInfo',
+      'mnemonic',
+      'passwordView',
+      'register_step1',
+      'register_step2',
+      'register_step3'
     ]),
 
     ...mapGetters([
@@ -62,10 +136,36 @@ export default {
     ]),
   },
 
+  data () {
+    return {
+      inputPassword:'',
+      inputMnemonic:''
+    }
+  },
   methods: {
     refreshBlcok () {
       this.$store.dispatch(LOAD_BLOCKS)
     },
+    submit (e) {
+      e.preventDefault()
+      this.inputPassword = ''
+    },
+    submit2 (e) {
+      e.preventDefault()
+      this.inputMnemonic = ''
+    },
+    next () {
+      this.$store.dispatch(REGISTER_STEP1, this.inputPassword)
+    },
+    next2 () {
+      this.$store.dispatch(REGISTER_STEP2)
+    },
+    next3 () {
+      this.$store.dispatch(REGISTER_STEP3, this.inputMnemonic)
+    },
+    loginNext () {
+      this.$store.dispatch(LOGIN_STEP1)
+    }
   },
 
   watch: {
@@ -111,4 +211,9 @@ export default {
   .refresh:hover {
     color: #83AFA5;
   }
+  .passwordInput {
+    width:500px;
+  }
 </style>
+
+<!--purity surge leader drill apple theme love cigar taste foam hold crouch-->

@@ -9,7 +9,6 @@
             <v-form @submit.prevent="submit" style="float:right">
               <v-text-field
                 dark
-                v-model="hash"
                 @input="text"
                 counter="130"
                 hide-details
@@ -19,12 +18,20 @@
               ></v-text-field>
             </v-form>
           </v-flex>
-          <v-flex>
-            <span class="menu mr-3 mt-2" style="float: right" @click="login">
+          <v-flex v-if="!joinComplete">
+            <span class="menu mr-3 mt-2" style="float: right" @click="login" >
               LOGIN
             </span>
             <span class="menu mr-5 mt-2" style="float: right" @click="register">
               REGISTER
+            </span>
+          </v-flex>
+          <v-flex v-else>
+            <span class="menu mr-3 mt-2" style="float: right" @click="logout" >
+              LOOUT
+            </span>
+            <span class="menu mr-3 mt-2" style="float: right"  >
+              {{ address }}
             </span>
           </v-flex>
         </v-layout>
@@ -35,11 +42,16 @@
 import { mapState, mapGetters } from 'vuex'
 import {
   LOGIN,
+  LOGOUT,
   REGISTER,
 } from '../../store/action-types'
 
 export default {
   computed: {
+    ...mapState([
+      'address',
+      'joinComplete',
+    ]),
     ...mapGetters([
       'linkBase'
     ])
@@ -51,6 +63,9 @@ export default {
     },
     login () {
       this.$store.dispatch(LOGIN)
+    },
+    logout () {
+      this.$store.dispatch(LOGOUT)
     },
     register () {
       this.$store.dispatch(REGISTER)

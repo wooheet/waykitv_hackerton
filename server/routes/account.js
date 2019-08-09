@@ -5,19 +5,13 @@ router.get('/', (req, res) => {
   res.send('');
 });
 
-router.post('/', (req, res) => {
-  let pwd = req.params.pwd;
-
-});
-
-router.post('/register', (req, res) => {
+router.get('/register', (req, res) => {
 
 
 });
 
-router.post('/login', (req, res) => {
-    let pwd = req.params.pwd;
-
+router.get('/login', (req, res) => {
+    res.send("test");
 });
 
 router.get('/:account', async (req, res) => {

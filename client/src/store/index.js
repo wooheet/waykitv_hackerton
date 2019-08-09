@@ -15,7 +15,17 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     login:false,
+    joinComplete:false,
     register:false,
+    passwordView:true,
+    register_step1:false,
+    register_step2:false,
+    register_step3:false,
+    privateKey:'',
+    password:'',
+    mnemonic:'',
+    address:'',
+    walletInfo:{},
     networkHealthy: true,
     accountLoading: false,
     txLoading: false,
@@ -195,7 +205,49 @@ export default new Vuex.Store({
 
     [mTypes.SET_REGISTER] (state, payload) {
       state.register = payload
+    },
+
+    [mTypes.SET_PK] (state, payload) {
+      state.privateKey = payload
+    },
+
+    [mTypes.SET_ADDRESS] (state, payload) {
+      state.address = payload
+    },
+
+    [mTypes.SET_WALLETINFO] (state, payload) {
+      state.walletInfo = payload
+    },
+
+    [mTypes.SET_MNEMONIC] (state, payload) {
+      state.mnemonic = payload
+    },
+
+    [mTypes.SET_REGISTER_STEP1] (state, payload) {
+      state.register_step1 = payload
+    },
+
+    [mTypes.SET_REGISTER_STEP2] (state, payload) {
+      state.register_step2 = payload
+    },
+
+    [mTypes.SET_REGISTER_STEP3] (state, payload) {
+      state.register_step3 = payload
+    },
+
+    [mTypes.SET_PASSWORD_VIEW] (state, payload) {
+      state.passwordView = payload
+    },
+
+    [mTypes.SET_PASSWORD] (state, payload) {
+      state.password = payload
+    },
+
+    [mTypes.SET_JOIN_COMPLETE] (state, payload) {
+      state.joinComplete = payload
     }
+
+
   },
 
   actions: {
@@ -224,14 +276,81 @@ export default new Vuex.Store({
     async [aTypes.LOGIN] ({ commit, state }) {
       commit(mTypes.SET_LOGIN, true)
       commit(mTypes.SET_REGISTER, false)
-      let account = await requestEs.login()
-      console.log("store", account)
+    },
+
+    async [aTypes.LOGIN_STEP1] ({ commit, state }) {
+      const wicc = require('wicc-wallet-lib');
+      let arg = {network: 'testnet'}
+      let api = new wicc.WiccApi(arg)
+      let password = '1234567890'
+      let strMne = 'such account wise drink slab any figure throw neither estate art series'
+      //Check if the mnemonic is valid
+      // api.checkMnemonicCode(strMne)
+      let address = api.getAddressFromMnemonicCode(strMne)
+      let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(strMne))
+      // let address2 = privateKey.toAddress();
+      // let walletInfo = api.createWallet(strMne, password)
+
+      commit(mTypes.SET_PK, privateKey)
+      commit(mTypes.SET_ADDRESS, address)
+      commit(mTypes.SET_JOIN_COMPLETE, true)
+      commit(mTypes.SET_LOGIN, false)
+      // commit(mTypes.SET_WALLETINFO, walletInfo)
+      // //Check if the address is valid
+      // api.validateAddress(address)
+
+      // let account = await requestEs.login()
+      // console.log("store", account)
+    },
+
+    async [aTypes.LOGOUT] ({ commit, state }) {
+      commit(mTypes.SET_JOIN_COMPLETE, false)
+      commit(mTypes.SET_ADDRESS, '')
+      commit(mTypes.SET_WALLETINFO, {})
+      commit(mTypes.SET_PK, '')
     },
 
     async [aTypes.REGISTER] ({ commit, state }) {
       commit(mTypes.SET_REGISTER, true)
       commit(mTypes.SET_LOGIN, false)
-      // requestEs.
+    },
+
+    async [aTypes.REGISTER_STEP1] ({ commit, state }, password) {
+      commit(mTypes.SET_PASSWORD_VIEW, false)
+      commit(mTypes.SET_REGISTER_STEP1, true)
+      const wicc = require('wicc-wallet-lib');
+      let arg = {network: 'testnet'}
+      let api = new wicc.WiccApi(arg)
+      let strMne = api.createAllCoinMnemonicCode()
+      commit(mTypes.SET_MNEMONIC, strMne)
+      commit(mTypes.SET_PASSWORD, password)
+    },
+
+    async [aTypes.REGISTER_STEP2] ({ commit, state }) {
+      commit(mTypes.SET_REGISTER_STEP1, false)
+      commit(mTypes.SET_REGISTER_STEP2, true)
+      const wicc = require('wicc-wallet-lib');
+      let arg = {network: 'testnet'}
+      let api = new wicc.WiccApi(arg)
+
+      let address = api.getAddressFromMnemonicCode(state.mnemonic)
+      let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(state.mnemonic))
+      let walletInfo = api.createWallet(state.mnemonic, state.password)
+
+      commit(mTypes.SET_ADDRESS, address)
+      commit(mTypes.SET_WALLETINFO, walletInfo)
+      commit(mTypes.SET_PK, privateKey)
+      commit(mTypes.SET_REGISTER_STEP2, true)
+    },
+
+    async [aTypes.REGISTER_STEP3] ({ commit, state }, inputMnemonic) {
+      if (inputMnemonic === state.mnemonic) {
+        commit(mTypes.SET_REGISTER_STEP2, false)
+        commit(mTypes.SET_REGISTER, false)
+        commit(mTypes.SET_PASSWORD_VIEW, true)
+        commit(mTypes.SET_JOIN_COMPLETE, true)
+        commit(mTypes.SET_PASSWORD, '')
+      }
     },
 
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {
