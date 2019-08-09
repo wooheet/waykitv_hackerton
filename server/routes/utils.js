@@ -1,14 +1,14 @@
 
 
-function createTx(accountId, contractId, fee, value) {
+function createTx(accountId, height, contractId, value, message) {
   return {
     nTxType: 4,                 //bitcore.WiccApi.CONTRACT_TX,
     nVersion: 1,
-    nValidHeight: 1108384,    // create height
-    srcRegId: "1105782-2",    // sender's regId
-    destRegId: "1108505-1",  // app regId
+    nValidHeight: height,    // create height
+    srcRegId: accountId,    // sender's regId
+    destRegId: contractId,  // app regId
     fees: 1000000,         // fees pay for miner
-    value: 8,              // amount of WICC to be sent to the app account
+    value: value * 100000000,              // amount of WICC to be sent to the app account
     vContract: "0001000000000000000000000000000000000000"      // contract method, hex format string
   }
 }
@@ -18,11 +18,11 @@ function createGame(accountId, height, script) {
   return {
     nTxType: 5,
     nVersion: 1,
-    nValidHeight: 34400,       // create height
+    nValidHeight: height,       // create height
     regAcctId: accountId,      // sender's regId
     script: script,            // contract scrypt content, string or buf
     scriptDesc: "",            // contract scrypt description, string or buf
-    fees: 110000000,           // fees pay for miner
+    fees: 500000000,           // fees pay for miner
   };
 
 
@@ -32,6 +32,7 @@ function createGame(accountId, height, script) {
 }
 
 module.exports = {
-  createTx: createTx
+  createTx: createTx,
+  createGame: createGame
 };
 

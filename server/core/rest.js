@@ -91,16 +91,15 @@ let tx = {
 let block = {
   getHeight: async () => {
     return new Promise((resolve, reject) => {
-      client.get(`/block/getblockcount`)
+      client.post(`/block/getblockcount`)
         .then(response => {
           if (response.data) {
-            logger.info(response.data);
             resolve(response.data);
           } else
             reject(response);
         })
         .catch(error => {
-          logger.error(error);
+          reject(error);
         })
     })
 
@@ -108,10 +107,32 @@ let block = {
 
 };
 
+let contract = {
+  getContractId: async (txhash) => {
+    return new Promise((resolve, reject) => {
+        client.post(`/contract/getcontractregid`, {
+          txhash
+        })
+          .then(response => {
+            if (response.data) {
+              resolve(response.data);
+            } else
+              reject(response);
+          })
+          .catch(error => {
+            reject(error);
+          })
+      })
+
+  }
+}
+
 
 module.exports = {
   account: account,
-  tx: tx
+  tx: tx,
+  block: block,
+  contract: contract
 };
 
 
