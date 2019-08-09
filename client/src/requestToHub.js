@@ -109,4 +109,10 @@ export async function register () {
   return res.data
 }
 
+export async function hosting (address, pk) {
+  let res = await request.post(`${API_HOST}/game/hosting`,{account: address, privateKey: pk}, {useCache: false})
+  return res
+}
+
+
 const API_HOST = '/api'

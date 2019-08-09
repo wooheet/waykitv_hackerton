@@ -288,7 +288,8 @@ export default new Vuex.Store({
       //Check if the mnemonic is valid
       // api.checkMnemonicCode(strMne)
       let address = api.getAddressFromMnemonicCode(strMne)
-      let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(strMne))
+      // let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(strMne))
+      let privateKey = api.getPriKeyFromMnemonicCode(strMne)
       // let address2 = privateKey.toAddress();
       // let walletInfo = api.createWallet(strMne, password)
 
@@ -337,7 +338,8 @@ export default new Vuex.Store({
       let api = new wicc.WiccApi(arg)
 
       let address = api.getAddressFromMnemonicCode(state.mnemonic)
-      let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(state.mnemonic))
+      // let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(state.mnemonic))
+      let privateKey = api.getPriKeyFromMnemonicCode(state.mnemonic)
       let walletInfo = api.createWallet(state.mnemonic, state.password)
 
       commit(mTypes.SET_ADDRESS, address)
@@ -354,6 +356,11 @@ export default new Vuex.Store({
         commit(mTypes.SET_JOIN_COMPLETE, true)
         commit(mTypes.SET_PASSWORD, '')
       }
+    },
+
+    async [aTypes.HOSTING] ({ commit, state }, inputMnemonic) {
+      const res = await requestEs.hosting(state.address.toString(), state.privateKey.toString())
+      console.log(res)
     },
 
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {

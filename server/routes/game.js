@@ -44,16 +44,17 @@ router.get('/', async (req, res) => {
 router.post('/hosting', async (req, res) => {
 
   let account = req.body.account;
+  let privateKey = wicc.PrivateKey.fromWIF(req.body.privateKey);
 
   try {
     let userInfo = await rest.account.getAccount(account);
     let block = await rest.block.getHeight();
-
     let script = fs.readFileSync(path.join(__dirname, '../../contract/demo.lua') , 'utf8');
     let contractTx = util.createGame(userInfo.data.regid, block.data, script);
 
+    console.log(contractTx);
     // test key
-    var privateKey = wicc.PrivateKey.fromWIF('Y9x4iimB6AYp3b73nRzaJHHZdEHcwb1A61LVyvpXVTgfbbdUj172')
+    // var privateKey = wicc.PrivateKey.fromWIF('Y9x4iimB6AYp3b73nRzaJHHZdEHcwb1A61LVyvpXVTgfbbdUj172')
 
     let rawTx = wiccApi.createSignTransaction(privateKey, 5, contractTx);
 

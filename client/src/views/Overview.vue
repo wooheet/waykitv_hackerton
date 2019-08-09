@@ -95,6 +95,11 @@
         </v-flex>
       </v-layout>
     </div>
+    <div v-if="joinComplete">
+      <div style="margin-top: 20px;">
+        <button v-on:click="hosting()" class="hosting"> hosting</button>
+      </div>
+    </div>
   </v-slide-y-transition>
 </template>
 
@@ -104,6 +109,7 @@ import { mapState, mapGetters } from 'vuex'
 import RecentBlockWidget from '../components/RecentBlockWidget'
 import Login from '../components/Login'
 import {
+  HOSTING,
   LOAD_BLOCKS,
   LOGIN_STEP1,
   REGISTER_STEP1,
@@ -128,7 +134,8 @@ export default {
       'passwordView',
       'register_step1',
       'register_step2',
-      'register_step3'
+      'register_step3',
+      'joinComplete'
     ]),
 
     ...mapGetters([
@@ -165,6 +172,10 @@ export default {
     },
     loginNext () {
       this.$store.dispatch(LOGIN_STEP1)
+    },
+
+    hosting () {
+      this.$store.dispatch(HOSTING)
     }
   },
 
@@ -213,6 +224,12 @@ export default {
   }
   .passwordInput {
     width:500px;
+  }
+  .hosting {
+    color:white;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 33px;
   }
 </style>
 
