@@ -100,7 +100,12 @@ export async function getNetworkStatus () {
 }
 
 export async function login () {
-  let res = await request.get(`${API_HOST}/login`, {useCache: false})
+  let res = await request.get(`${API_HOST}/account/login`, {useCache: false})
+  return res.data
+}
+
+export async function register () {
+  let res = await request.get(`${API_HOST}/account/register`, {useCache: false})
   return res.data
 }
 

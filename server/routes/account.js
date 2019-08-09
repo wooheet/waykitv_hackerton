@@ -10,6 +10,16 @@ router.post('/', (req, res) => {
 
 });
 
+router.post('/register', (req, res) => {
+
+
+});
+
+router.post('/login', (req, res) => {
+    let pwd = req.params.pwd;
+
+});
+
 router.get('/:account', async (req, res) => {
     await rest.account.getAccount(req.params.account)
       .then(resp => {

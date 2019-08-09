@@ -225,7 +225,7 @@ export default new Vuex.Store({
       commit(mTypes.SET_LOGIN, true)
       commit(mTypes.SET_REGISTER, false)
       let account = await requestEs.login()
-      console.log(account)
+      console.log("store", account)
     },
 
     async [aTypes.REGISTER] ({ commit, state }) {
