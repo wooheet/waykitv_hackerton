@@ -3,6 +3,7 @@ const router = express.Router();
 const wicc = require('wicc-wallet-lib');
 let arg = {network: 'testnet'}
 let api = new wicc.WiccApi(arg)
+let password = '1234567890'
 
 router.get('/', function(req, res, next) {
   let strMne = api.createAllCoinMnemonicCode()
@@ -13,6 +14,9 @@ router.get('/', function(req, res, next) {
 
   let privateKey1 = api.getPriKeyFromMnemonicCode(strMne)
   console.log('privateKey1='+privateKey1)
+
+  let walletInfo = api.createWallet(strMne, password)
+  console.log(walletInfo)
 
   res.send(strMne);
 });
