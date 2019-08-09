@@ -276,6 +276,7 @@ export default new Vuex.Store({
     async [aTypes.LOGIN] ({ commit, state }) {
       commit(mTypes.SET_LOGIN, true)
       commit(mTypes.SET_REGISTER, false)
+      commit(mTypes.SET_PK, '')
     },
 
     async [aTypes.LOGIN_STEP1] ({ commit, state }) {
@@ -295,6 +296,7 @@ export default new Vuex.Store({
       commit(mTypes.SET_ADDRESS, address)
       commit(mTypes.SET_JOIN_COMPLETE, true)
       commit(mTypes.SET_LOGIN, false)
+      commit(mTypes.SET_PASSWORD, '')
       // commit(mTypes.SET_WALLETINFO, walletInfo)
       // //Check if the address is valid
       // api.validateAddress(address)
@@ -313,6 +315,7 @@ export default new Vuex.Store({
     async [aTypes.REGISTER] ({ commit, state }) {
       commit(mTypes.SET_REGISTER, true)
       commit(mTypes.SET_LOGIN, false)
+      commit(mTypes.SET_PK, '')
     },
 
     async [aTypes.REGISTER_STEP1] ({ commit, state }, password) {
