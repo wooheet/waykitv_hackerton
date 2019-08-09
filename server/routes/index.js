@@ -3,8 +3,6 @@ const router = app.Router();
 
 const _ = require('lodash');
 
-const rest = require('../core/rest');
-
 var bitcore = require('wicc-wallet-lib');
 
 var privateKey = bitcore.PrivateKey.fromWIF('Y9x4iimB6AYp3b73nRzaJHHZdEHcwb1A61LVyvpXVTgfbbdUj172')
@@ -37,10 +35,6 @@ router.get("/", async function (req, res) {
 
 });
 
-<<<<<<< HEAD
-
-
-
 
 function createCommonTx() {
   return {
@@ -72,13 +66,5 @@ function createContractTx() {
 }
 
 router.use('/account', require('./account'));
-
-
-=======
-router.get("/login", async function (req, res) {
-
-    res.send('login');
-});
->>>>>>> feature/vue
 
 module.exports = router;
