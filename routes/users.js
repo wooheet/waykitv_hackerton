@@ -5,18 +5,31 @@ let arg = {network: 'testnet'}
 let api = new wicc.WiccApi(arg)
 let password = '1234567890'
 
+// var privateKey = new wicc.PrivateKey();
+// var address = privateKey.toAddress();
+
 router.get('/', function(req, res, next) {
+
+  // Wallet
   let strMne = api.createAllCoinMnemonicCode()
-  console.log('New MnemonicCode='+ strMne)
-
   let ret = api.checkMnemonicCode(strMne)
-  console.log('Check MnemonicCode Result=' + ret)
-
-  let privateKey1 = api.getPriKeyFromMnemonicCode(strMne)
-  console.log('privateKey1='+privateKey1)
-
+  let address = api.getAddressFromMnemonicCode(strMne)
+  let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(strMne))
   let walletInfo = api.createWallet(strMne, password)
-  console.log(walletInfo)
+
+  // Transaction
+  var registeraccounttxInfo = {
+      nTxType: 2,         //REGISTER_ACCOUNT_TX
+      nVersion: 1,
+      nValidHeight: 219831,
+      fees: 10000,
+      minerPubkey: '',
+      pubkey: address
+  }
+
+ // let rawTx =  api.createSignTransaction(privateKey, api.REGISTER_ACCOUNT_TX, registeraccounttxInfo)
+
+
 
   res.send(strMne);
 });
