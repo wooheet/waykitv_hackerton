@@ -13,6 +13,24 @@ function createTx(accountId, contractId, fee, value) {
   }
 }
 
+function createGame(accountId, height, script) {
+
+  return {
+    nTxType: 5,
+    nVersion: 1,
+    nValidHeight: 34400,       // create height
+    regAcctId: accountId,      // sender's regId
+    script: script,            // contract scrypt content, string or buf
+    scriptDesc: "",            // contract scrypt description, string or buf
+    fees: 110000000,           // fees pay for miner
+  };
+
+
+
+
+
+}
+
 module.exports = {
   createTx: createTx
 };

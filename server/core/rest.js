@@ -1,0 +1,140 @@
+const config = require('../config');
+const logger = require('../core/logger');
+
+const _ = require('lodash');
+
+const client = require('./axios/axios');
+
+var http = require('http');
+
+function options(account) {
+  return {
+    hostname: 'https://faucet.wiccdev.org/testnet/getwicc/',
+    path: account
+  }
+}
+
+function handleResponse(response) {
+  var serverData = '';
+  response.on('data', function (chunk) {
+    serverData += chunk;
+  });
+  response.on('end', function () {
+    console.log("received server data:");
+    console.log(serverData);
+  });
+}
+
+let account = {
+  getAccount: async (account) => {
+    return new Promise((resolve, reject) => {
+      client.post(`/account/getaccountinfo`, {
+        address: account
+      }).then(response => {
+        if (response.data) {
+          logger.info(response.data);
+          resolve(response.data);
+        } else
+          reject(response);
+      }).catch(error => {
+        logger.error(error);
+      })
+    })
+  }
+};
+
+let tx = {
+  sendRawTx: async (rawTx) => {
+    return new Promise((resolve, reject) => {
+      client.post(`/transaction/sendrawtx`, {
+        rawtx: rawTx
+      }).then(response => {
+        if (response.data) {
+          logger.info(response.data);
+          resolve(response.data);
+        } else
+          reject(response);
+      })
+        .catch(error => {
+          logger.error(error);
+        })
+    })
+  },
+
+  getGameData: async (body) => {
+    return new Promise((resolve, reject) => {
+      client.post(`/contract/getcontractdata`, body).then(response => {
+        if (response.data) {
+          resolve(response.data);
+        } else
+          reject(response);
+      })
+        .catch(error => {
+          logger.error(error);
+        })
+    })
+
+
+
+  },
+
+  faucet: async (account) => {
+
+    //https://faucet.wiccdev.org/testnet/getwicc/wWiX77hWwebSyz3nURguAfMHx5zBeAwgT3
+
+    http.request(options(account), function (response) {
+      handleResponse(response);
+    }).end();
+  }
+};
+
+let block = {
+  getHeight: async () => {
+    return new Promise((resolve, reject) => {
+      client.get(`/block/getblockcount`)
+        .then(response => {
+          if (response.data) {
+            logger.info(response.data);
+            resolve(response.data);
+          } else
+            reject(response);
+        })
+        .catch(error => {
+          logger.error(error);
+        })
+    })
+
+  }
+
+};
+
+
+module.exports = {
+  account: account,
+  tx: tx
+};
+
+
+// module.exports = {
+//     sendRawTx: async (rawTx) => {
+//         return new Promise((resolve, reject) => {
+//             client.post(`/transaction/sendrawtx`, {
+//                 rawtx: rawTx
+//             }).then(response => {
+//                 if (response.data) {
+//                     logger.info(response.data);
+//                     resolve(response.data);
+//                 }
+//                 else
+//                     reject(response);
+//             })
+//               .catch(error => {
+//                   logger.error(error);
+//               })
+//         })
+//
+//     },
+//
+// };
+
+

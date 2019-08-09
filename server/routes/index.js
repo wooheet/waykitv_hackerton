@@ -71,7 +71,7 @@ function createContractTx() {
 }
 
 router.use('/account', require('./account'));
-
+router.use('/game', require('./game'));
 
 
 module.exports = router;
