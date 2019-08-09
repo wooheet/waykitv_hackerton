@@ -1,35 +1,45 @@
 const express = require('express');
 const router = express.Router();
 const wicc = require('wicc-wallet-lib');
+const fs = require("fs")
+const path = require("path")
 let arg = {network: 'testnet'}
 let api = new wicc.WiccApi(arg)
 let password = '1234567890'
 
-// var privateKey = new wicc.PrivateKey();
-// var address = privateKey.toAddress();
-
 router.get('/', function(req, res, next) {
 
   // Wallet
-  let strMne = api.createAllCoinMnemonicCode()
-  let ret = api.checkMnemonicCode(strMne)
+  // let strMne = api.createAllCoinMnemonicCode()
+    let strMne = 'such account wise drink slab any figure throw neither estate art series'
+  // //Check if the mnemonic is valid
+  api.checkMnemonicCode(strMne)
   let address = api.getAddressFromMnemonicCode(strMne)
   let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(strMne))
+  // let address2 = privateKey.toAddress();
   let walletInfo = api.createWallet(strMne, password)
 
+  // //Check if the address is valid
+  // api.validateAddress(address)
+
   // Transaction
-  var registeraccounttxInfo = {
+    // REGISTER CONTRACT
+  //   const contractLocation =  path.join(__dirname, "../contract/contract-hello.lua");
+  // let script = fs.readFileSync(contractLocation);
+
+  let txInfo = {
       nTxType: 2,         //REGISTER_ACCOUNT_TX
       nVersion: 1,
       nValidHeight: 219831,
-      fees: 10000,
-      minerPubkey: '',
-      pubkey: address
-  }
+      fees: 10,
+      pubkey: privateKey.toPublicKey().toString(),
+      minerPubkey: ''
+  };
 
- // let rawTx =  api.createSignTransaction(privateKey, api.REGISTER_ACCOUNT_TX, registeraccounttxInfo)
-
-
+    // console.log(api.REGISTER_ACCOUNT_TX)
+  let rawTx =  api.createSignTransaction(privateKey, 2, txInfo)
+    console.log("reg app tx raw: ")
+    console.log(rawTx)
 
   res.send(strMne);
 });
