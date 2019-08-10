@@ -109,8 +109,15 @@ export async function register () {
   return res.data
 }
 
-export async function hosting (address, pk) {
-  let res = await request.post(`${API_HOST}/game/hosting`,{account: address, privateKey: pk}, {useCache: false})
+export async function hosting (pk) {
+  let res = await request.post(`${API_HOST}/game/hosting`,{privateKey: pk}, {useCache: false})
+  return res.data
+}
+
+export async function queryHosting (hash) {
+  // let res = await request.get(`${API_HOST}/game/number${hash}`, {useCache: false})
+
+  let res = await request.get(`${API_HOST}/game/number/d4b016f469e7d3f46927c131869f603180995909f7db79cbf6fe21f134919d1b`, {useCache: false})
   return res
 }
 

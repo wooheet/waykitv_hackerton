@@ -407,9 +407,9 @@ export default new Vuex.Store({
       }
     },
 
-    async [aTypes.HOSTING] ({ commit, state }, inputMnemonic) {
-      const res = await requestEs.hosting(state.address.toString(), state.privateKey.toString())
-      console.log(res)
+    async [aTypes.HOSTING] ({ commit, state }, key) {
+      const res = await requestEs.hosting(key)
+      console.log("store", res)
     },
 
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {

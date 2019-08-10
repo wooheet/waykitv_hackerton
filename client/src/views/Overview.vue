@@ -105,14 +105,47 @@
                   <span class="title font-weight-medium mb-2 ml-3 white--text">HOSTING ROOM</span>
                 </v-flex>
                 <v-flex mb-5>
+                  <v-form @submit.prevent="submit">
+                    <v-text-field
+                      dark
+                      v-model="hostingKey"
+                      class="generateTxKey"
+                      counter="130"
+                      hide-details
+                      placeholder="KEY"
+                      @click:append="submit"
+                    ></v-text-field>
+                  </v-form>
                   <v-btn round v-on:click="hosting()" flat class="white--text">
                     CREATE HOSTING ROOM</v-btn>
                 </v-flex>
                 <v-flex mb-5>
+                  <v-form @submit.prevent="submit">
+                    <v-text-field
+                      dark
+                      v-model="votingKey"
+                      class="generateTxKey"
+                      counter="130"
+                      hide-details
+                      placeholder="KEY"
+                      @click:append="submit"
+                    ></v-text-field>
+                  </v-form>
                   <v-btn round  flat class="white--text">
                     VOTING</v-btn>
                 </v-flex>
                 <v-flex mb-5>
+                  <v-form @submit.prevent="submit">
+                    <v-text-field
+                      dark
+                      v-model="endKey"
+                      class="generateTxKey"
+                      counter="130"
+                      hide-details
+                      placeholder="KEY"
+                      @click:append="submit"
+                    ></v-text-field>
+                  </v-form>
                   <v-btn round  flat class="white--text">
                     END</v-btn>
                 </v-flex>
@@ -187,7 +220,10 @@ export default {
   data () {
     return {
       inputPassword:'',
-      inputMnemonic:''
+      inputMnemonic:'',
+      hostingKey:'',
+      votingKey:'',
+      endKey:'',
     }
   },
   methods: {
@@ -216,7 +252,7 @@ export default {
     },
 
     hosting () {
-      this.$store.dispatch(HOSTING)
+      this.$store.dispatch(HOSTING, this.hostingKey)
     }
 
 
@@ -273,6 +309,11 @@ export default {
     font-style: normal;
     font-weight: bold;
     font-size: 33px;
+  }
+  .generateTxKey {
+    margin-left:15px;
+    margin-bottom:20px;
+    width:350px;
   }
 </style>
 
