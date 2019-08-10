@@ -195,6 +195,7 @@
                   <v-btn round  flat v-on:click="endGame()"  class="white--text">
                     END</v-btn>
                 </v-flex>
+                <span class="title font-weight-medium mb-2 ml-3 white--text">{{rewardResult}}</span>
               </v-card>
             </v-flex>
           </v-flex>
@@ -256,7 +257,8 @@ export default {
       'hostroomid',
       'gameStatus',
       'voteStatus',
-      'balances'
+      'balances',
+      'rewardResult'
     ]),
 
     ...mapState({

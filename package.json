@@ -12,7 +12,8 @@
     "client-build": "cd client && npm run build",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "start": "npm run client-build && npm run server-prod",
-    "test": "sonarlint --src 'server/**' --tests '**/test**' "
+    "test": "sonarlint --src 'server/**' --tests '**/test**' ",
+    "deploy": "gh-pages -d build"
   },
   "config": {
     "address": {
@@ -38,6 +39,7 @@
     "express-list-endpoints": "^4.0.1",
     "express-session": "^1.16.1",
     "express-validator": "^5.3.1",
+    "gh-pages": "^2.1.1",
     "helmet": "^3.18.0",
     "helmet-crossdomain": "^0.3.0",
     "http-errors": "~1.6.3",
