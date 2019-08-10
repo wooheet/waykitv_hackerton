@@ -358,11 +358,14 @@ export default new Vuex.Store({
       const res = await requestEs.getBalance(accounts)
       commit(mTypes.SET_BALANCES, res.data)
 
-      for (let i in state.userAccountList) {
-        state.userAccountList[i]["balance"] = res.data[i]
-      }
 
-      commit(mTypes.UPDATE_USER_ACCOUNT_LIST, state.userAccountList)
+      var CronJob = require('cron').CronJob;
+      new CronJob('*/5 * * * * *', async function() {
+        for (let i in state.userAccountList) {
+          state.userAccountList[i]["balance"] = res.data[i]
+        }
+        commit(mTypes.UPDATE_USER_ACCOUNT_LIST, state.userAccountList)
+      }, null, true, 'America/Los_Angeles');
 
       // for (let i of state.userAccountList) {
       //   // let balance = {

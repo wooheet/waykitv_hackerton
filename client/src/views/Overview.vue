@@ -101,10 +101,10 @@
           <v-flex sm12 md6 pa-1>
             <v-flex mb-0 >
               <v-card class="network-info white--text">
-                <v-flex sm11 mb-5>
+                <v-flex sm11 mb-3>
                   <span class="title font-weight-medium mb-2 ml-3 white--text">HOSTING ROOM</span>
                 </v-flex>
-                <v-flex mb-5>
+                <v-flex mb-3>
                   <v-form @submit.prevent="submit">
                     <v-text-field
                       dark
