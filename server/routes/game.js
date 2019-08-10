@@ -99,7 +99,7 @@ router.post('/hosting', async (req, res) => {
 });
 
 router.post('/init', async (req, res) => {
-  let contract = req.body.contract;
+  let contract = req.body.contract; //1111137-1
   let host = req.body.host;
   let guest = req.body.guest;
   // let privateKey = wicc.PrivateKey.fromWIF(req.body.privateKey);

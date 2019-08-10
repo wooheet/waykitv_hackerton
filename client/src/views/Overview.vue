@@ -161,8 +161,8 @@
                           wrap
                           v-for="(value, props) in account" :key="props"
                           class="py-2 mt-2">
-                  <v-flex xs12 sm12 style="color: #9A9A9A">{{ value.address }}</v-flex>
-                  <v-flex xs6 sm6 style="color: #9A9A9A">{{ value.pk }}</v-flex>
+                  <v-flex ml-3 xs12 sm12 style="color: #9A9A9A">{{ value.address }}</v-flex>
+                  <v-flex ml-3 xs6 sm6 style="color: #9A9A9A">{{ value.pk }}</v-flex>
                 </v-layout>
               </v-card>
             </v-flex>

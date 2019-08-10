@@ -115,10 +115,9 @@ export async function hosting (pk) {
 }
 
 export async function queryHosting (hash) {
-  // let res = await request.get(`${API_HOST}/game/number${hash}`, {useCache: false})
-
-  let res = await request.get(`${API_HOST}/game/number/d4b016f469e7d3f46927c131869f603180995909f7db79cbf6fe21f134919d1b`, {useCache: false})
-  return res
+  let res = await request.get(`${API_HOST}/game/number/${hash}`, {useCache: false})
+  // let res = await request.get(`${API_HOST}/game/number/d4b016f469e7d3f46927c131869f603180995909f7db79cbf6fe21f134919d1b`, {useCache: false})
+  return res.data
 }
 
 

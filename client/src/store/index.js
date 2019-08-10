@@ -409,7 +409,14 @@ export default new Vuex.Store({
 
     async [aTypes.HOSTING] ({ commit, state }, key) {
       const res = await requestEs.hosting(key)
-      console.log("store", res)
+      const contract_id = await requestEs.queryHosting(res)
+      while (contract_id === 'uncomfirmed') {
+        let result = await requestEs.queryHosting(res)
+        if (result !== 'uncomfirmed') {
+          console.log("store", result)
+          break;
+        }
+      }
     },
 
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {
