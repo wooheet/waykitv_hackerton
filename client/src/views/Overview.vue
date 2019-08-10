@@ -95,11 +95,81 @@
         </v-flex>
       </v-layout>
     </div>
-    <div v-if="joinComplete">
-      <div style="margin-top: 20px;">
-        <button v-on:click="hosting()" class="hosting"> hosting</button>
-      </div>
-    </div>
+    <v-layout column v-if="joinComplete">
+      <v-flex>
+        <v-layout wrap >
+          <v-flex sm12 md6 pa-1>
+            <v-flex mb-0 >
+              <v-card class="network-info white--text">
+                <v-flex sm11 mb-5>
+                  <span class="title font-weight-medium mb-2 ml-3 white--text">HOSTING ROOM</span>
+                </v-flex>
+                <v-flex mb-5>
+                  <v-form @submit.prevent="submit">
+                    <v-text-field
+                      dark
+                      v-model="hostingKey"
+                      class="generateTxKey"
+                      counter="130"
+                      hide-details
+                      placeholder="KEY"
+                      @click:append="submit"
+                    ></v-text-field>
+                  </v-form>
+                  <v-btn round v-on:click="hosting()" flat class="white--text">
+                    CREATE HOSTING ROOM</v-btn>
+                </v-flex>
+                <v-flex mb-5>
+                  <v-form @submit.prevent="submit">
+                    <v-text-field
+                      dark
+                      v-model="votingKey"
+                      class="generateTxKey"
+                      counter="130"
+                      hide-details
+                      placeholder="KEY"
+                      @click:append="submit"
+                    ></v-text-field>
+                  </v-form>
+                  <v-btn round  flat class="white--text">
+                    VOTING</v-btn>
+                </v-flex>
+                <v-flex mb-5>
+                  <v-form @submit.prevent="submit">
+                    <v-text-field
+                      dark
+                      v-model="endKey"
+                      class="generateTxKey"
+                      counter="130"
+                      hide-details
+                      placeholder="KEY"
+                      @click:append="submit"
+                    ></v-text-field>
+                  </v-form>
+                  <v-btn round  flat class="white--text">
+                    END</v-btn>
+                </v-flex>
+              </v-card>
+            </v-flex>
+          </v-flex>
+          <v-flex sm12 md6 pa-1>
+            <v-flex mb-0 >
+              <v-card class="transaction-history">
+                <span class="title font-weight-medium ml-3 white--text mb-5">USER TEST KEY LIST</span>
+                <!--<span class="title font-weight-medium ml-3 white&#45;&#45;text">{{account}}</span>-->
+                <v-layout row
+                          wrap
+                          v-for="(value, props) in account" :key="props"
+                          class="py-2 mt-2">
+                  <v-flex xs12 sm12 style="color: #9A9A9A">{{ value.address }}</v-flex>
+                  <v-flex xs6 sm6 style="color: #9A9A9A">{{ value.pk }}</v-flex>
+                </v-layout>
+              </v-card>
+            </v-flex>
+          </v-flex>
+        </v-layout>
+      </v-flex>
+    </v-layout>
   </v-slide-y-transition>
 </template>
 
@@ -138,6 +208,10 @@ export default {
       'joinComplete'
     ]),
 
+    ...mapState({
+      account: 'userAccountList'
+    }),
+
     ...mapGetters([
       'linkBase'
     ]),
@@ -146,7 +220,10 @@ export default {
   data () {
     return {
       inputPassword:'',
-      inputMnemonic:''
+      inputMnemonic:'',
+      hostingKey:'',
+      votingKey:'',
+      endKey:'',
     }
   },
   methods: {
@@ -175,8 +252,10 @@ export default {
     },
 
     hosting () {
-      this.$store.dispatch(HOSTING)
+      this.$store.dispatch(HOSTING, this.hostingKey)
     }
+
+
   },
 
   watch: {
@@ -210,11 +289,11 @@ export default {
   }
   .transaction-history {
     background-color: rgba(66, 66, 66, 0.3);
-    height: 300px;
+    height: 700px;
   }
   .network-info {
     background-color: rgba(66, 66, 66, 0.3);
-    height: 300px;
+    height: 700px;
   }
   .refresh {
     margin-top: -2px;
@@ -230,6 +309,11 @@ export default {
     font-style: normal;
     font-weight: bold;
     font-size: 33px;
+  }
+  .generateTxKey {
+    margin-left:15px;
+    margin-bottom:20px;
+    width:350px;
   }
 </style>
 

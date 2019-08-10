@@ -15,6 +15,48 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     login:false,
+    userAccountList: [
+      {
+        address: 'wUKQ3xBxCujkE18EazfUjemY8E341FyuDL',
+        pk:'YB5fGryWWMoUU16Wg8Tu7nfBX6cdb7fGUSJdohTYHeWaLKEHdMwa'
+      },
+      {
+        address: 'wZPQNFru7fWVyWqmcFEY6zZ51HudiKA29C',
+        pk:'YAAfjtzgbSGmEfDjKSe995HcCFzupkQetag1S5RhtN3thU7zYhMt'
+      },
+      {
+        address: 'wenbWRV2A7mYtwCjZjFpidi6JqxYxhsBLp',
+        pk:'YCwc3EWqMUL35wtysGDjXSyfc5cqTWmdpYAt1qV3Ywj5J1mc36sH'
+      },
+      {
+        address: 'wf12C9ZFmJES8Digdop4qy233BaHe6ZYZT',
+        pk:'Y6TCkExDdXCbRze1ak7vNvdmYY1n75K3fGLWtcTw28yQun27czM3'
+      },
+      {
+        address: 'wP2Gpp8CTNTBcQueSft2jNH3Msmpkyi9sU',
+        pk:'Y9M5HmCM4LyAZ61rDrESxRitUnTwFmStWsajTSpyHKFN3n5myUZF'
+      },
+      {
+        address: 'wiDuTx6ft79FVuLE4GGjMT1ucrFjJds196',
+        pk:'YDLdZYCQgGeYJUiojBAiJYdkr81DZAJ6y94y4H9b69vdDYhTtJsR'
+      },
+      {
+        address: 'wRFD15WMHvkcsD5r2qE81EE5pRE65orK2W',
+        pk:'YCSNn4CEyUQqBGocBKPCBV4NjpqQAjKw3YqFDhXiCw3e48jWS6Dy'
+      },
+      {
+        address: 'wQhcuvjtJj6XCxN6XSJ1wyyVRbpc96DweJ',
+        pk:'Y9ynYbPPFwy4DBJdpFY6ca7tAF5Met5g5c7saRJ16NgF3yWYt1zm'
+      },
+      {
+        address: 'wWDQ2BMEJLAYB5xMZSKFTTm6s3zRwy2WG9',
+        pk:'YBH5ZkC3WEmpzjU7ChVvsvzTZmXjWFY97QmAqeo54d1sUeUWXZXb'
+      },
+      {
+        address: 'wQnxurYKYkDaZCEJQWCCTUBkUopQiKDtBG',
+        pk:'Y4o9YqtqL4AifSfiiyD6dURogrcWusELak5VAqE3donVJCUFzU8j'
+      },
+    ],
     joinComplete:false,
     register:false,
     passwordView:true,
@@ -245,9 +287,11 @@ export default new Vuex.Store({
 
     [mTypes.SET_JOIN_COMPLETE] (state, payload) {
       state.joinComplete = payload
+    },
+
+    [mTypes.SET_ACCOUNT_LIST] (state, payload) {
+      state.userAccountList = payload
     }
-
-
   },
 
   actions: {
@@ -284,20 +328,25 @@ export default new Vuex.Store({
       let arg = {network: 'testnet'}
       let api = new wicc.WiccApi(arg)
       let password = '1234567890'
-      let strMne = 'such account wise drink slab any figure throw neither estate art series'
+      // let strMne = 'such account wise drink slab any figure throw neither estate art series'
+      let strMne = api.createAllCoinMnemonicCode()
       //Check if the mnemonic is valid
       // api.checkMnemonicCode(strMne)
-      let address = api.getAddressFromMnemonicCode(strMne)
+      // let address = api.getAddressFromMnemonicCode(strMne)
       // let privateKey = new wicc.PrivateKey.fromWIF(api.getPriKeyFromMnemonicCode(strMne))
-      let privateKey = api.getPriKeyFromMnemonicCode(strMne)
+      // let privateKey = api.getPriKeyFromMnemonicCode(strMne)
       // let address2 = privateKey.toAddress();
       // let walletInfo = api.createWallet(strMne, password)
 
-      commit(mTypes.SET_PK, privateKey)
-      commit(mTypes.SET_ADDRESS, address)
+      // commit(mTypes.SET_PK, privateKey)
+      // commit(mTypes.SET_ADDRESS, address)
       commit(mTypes.SET_JOIN_COMPLETE, true)
       commit(mTypes.SET_LOGIN, false)
       commit(mTypes.SET_PASSWORD, '')
+
+
+
+
       // commit(mTypes.SET_WALLETINFO, walletInfo)
       // //Check if the address is valid
       // api.validateAddress(address)
@@ -358,9 +407,9 @@ export default new Vuex.Store({
       }
     },
 
-    async [aTypes.HOSTING] ({ commit, state }, inputMnemonic) {
-      const res = await requestEs.hosting(state.address.toString(), state.privateKey.toString())
-      console.log(res)
+    async [aTypes.HOSTING] ({ commit, state }, key) {
+      const res = await requestEs.hosting(key)
+      console.log("store", res)
     },
 
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {

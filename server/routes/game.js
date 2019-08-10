@@ -58,8 +58,10 @@ router.post('/', async (req, res) => {
 
 router.post('/hosting', async (req, res) => {
 
-  let account = req.body.account;
+  console.log("game", req.body.privateKey)
   let privateKey = wicc.PrivateKey.fromWIF(req.body.privateKey);
+  let pkaddr = privateKey.toAddress();
+  let account = pkaddr.toString()
 
   try {
     let userInfo = await rest.account.getAccount(account);
@@ -74,7 +76,7 @@ router.post('/hosting', async (req, res) => {
 
     // console.log(rawTx);
     let txHash = await rest.tx.sendRawTx(rawTx);
-    console.log(txHash.data.hash);
+    console.log("game txHash.data.hash", txHash.data.hash);
 
     let roomInfo = {
       host: account,
