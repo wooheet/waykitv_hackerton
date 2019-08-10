@@ -1,6 +1,6 @@
 mylib = require "mylib"
 --must start with mylib = require "mylib". Be sure to put it in the first line. If the first line is left blank, an exception will be reported.
-​
+
 --Define calling smart contract events
 METHOD = {
     INITIALIZE_GAME  = 0x01,
@@ -8,35 +8,35 @@ METHOD = {
     END_GAME = 0x03,
     TEST = 0x04
 }
-​
+
 Unpack = function (t,i)
     i = i or 1
     if t[i] then
       return t[i], Unpack(t,i+1)
     end
 end
-​
+
 --Write date into the blockChain
 WriteStrkeyValueToDb = function (Strkey,ValueTbl)
     local t = type(ValueTbl)
     assert(t == "table","the type of Value isn't table.")
-​
+
     local writeTbl = {
         key = Strkey,
         length = #ValueTbl,
         value = {}
     }
     writeTbl.value = ValueTbl
-​
+
     if not mylib.WriteData(writeTbl) then  error("WriteData error") end
 end
-​
+
 --get external call context
 GetContractTxParam = function (startIndex, length)
     assert(startIndex > 0, "GetContractTxParam start error(<=0).")
     assert(length > 0, "GetContractTxParam length error(<=0).")
     assert(startIndex+length-1 <= #contract, "GetContractTxParam length ".. length .." exceeds limit: " .. #contract)
-​
+
     local newTbl = {}
     local i = 1
     for i = 1,length do
@@ -44,9 +44,9 @@ GetContractTxParam = function (startIndex, length)
     end
     return newTbl
 end
-​
+
 ---------------------------------------------------
-​
+
 slice_arr = function (arr, start, len)
     local newArr = {}
     local i = 1
@@ -55,7 +55,7 @@ slice_arr = function (arr, start, len)
     end
     return newArr
 end
-​
+
 initialize_game = function(host_bj,guest_bj,end_date)
     local GAME_STATE = {
         STATUS_FLAG = mylib.ReadData("GAME_STATE:STATUS_FLAG")
@@ -71,7 +71,7 @@ initialize_game = function(host_bj,guest_bj,end_date)
     WriteStrkeyValueToDb("GAME_STATE:HOST_VOTER",{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00})
     WriteStrkeyValueToDb("GAME_STATE:GUEST_VOTER",{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00})
 end
-​
+
 bet_wicc = function(target_bj)
     local GAME_STATE = {
         STATUS_FLAG = mylib.ReadData("GAME_STATE:STATUS_FLAG"),
@@ -105,7 +105,7 @@ bet_wicc = function(target_bj)
         WriteStrkeyValueToDb("GAME_STATE:GUEST_VOTER",{mylib.IntegerToByte8(guest_voter)})
     end
 end
-​
+
 end_game = function()
     local GAME_STATE = {
         STATUS_FLAG = mylib.ReadData("GAME_STATE:STATUS_FLAG"),
@@ -173,18 +173,18 @@ end_game = function()
 
     local regidTbl = {mylib.GetScriptID()}
 end
-​
+
 GetPrizePoolBalance = function()
-​
+
     local regidTbl = {mylib.GetScriptID()}
     assert(#regidTbl > 0," GetScriptID err")
-​
+
     local balanceTbl =
     assert(#balanceTbl == 8,"QueryAccountBalance err");
-​
+
     return mylib.ByteToInteger(Unpack(balanceTbl))
 end
-​
+
 WriteAccountData = function (opType, addrType, accountIdTbl, moneyTbl)
     local writeOutputTbl = {
         addrType = addrType,
@@ -195,8 +195,8 @@ WriteAccountData = function (opType, addrType, accountIdTbl, moneyTbl)
     }
     assert(mylib.WriteOutput(writeOutputTbl),"WriteAccountData" .. opType .. " err")
 end
-​
-​
+
+
 TransferToAddr = function (addrType, accTbl, moneyTbl)
     assert(TableIsNotEmpty(accTbl), "WriteWithdrawal accTbl empty")
     assert(TableIsNotEmpty(moneyTbl), "WriteWithdrawal moneyTbl empty")
@@ -205,7 +205,7 @@ TransferToAddr = function (addrType, accTbl, moneyTbl)
     WriteAccountData(OP_TYPE.SUB_FREE, ADDR_TYPE.REGID, appRegId, moneyTbl)
     return true
 end
-​
+
 --Entry function of smart contract
 Main = function()
     if contract[2] == METHOD.INITIALIZE_GAME then
@@ -224,5 +224,5 @@ Main = function()
         error('method# '..string.format("%02x", contract[2])..' not found')
     end
 end
-​
+
 Main()
