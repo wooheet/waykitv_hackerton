@@ -472,8 +472,10 @@ export default new Vuex.Store({
     async [aTypes.END_GAME] ({ commit, state }, data) {
       let hostroomid = state.hostroomid? state.hostroomid : '1111891-1'
       const res = await requestEs.endGame(data, 0, hostroomid)
-      const result = await requestEs.gameResult(hostroomid)
-      commit(mTypes.SET_REWARD_RESULT, result.data)
+      new CronJob('*/5 * * * * *', async function() {
+        const result = await requestEs.gameResult(hostroomid)
+        commit(mTypes.SET_REWARD_RESULT, result.data)
+      }, null, true, 'America/Los_Angeles');
     },
 
     async [aTypes.GET_BALANCE] ({ commit, state }, accounts) {
