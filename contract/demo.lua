@@ -1,13 +1,17 @@
 mylib = require "mylib"
---must start with mylib = require "mylib". Be sure to put it in the first line. If the first line is left blank, an exception will be reported.
 
---Define calling smart contract events
+
+------- CONSTANTS -------
+
 METHOD = {
     INITIALIZE_GAME  = 0x01,
     BET_WICC = 0x02,
     END_GAME = 0x03,
     TEST = 0x04
 }
+
+
+------- COMMON FUNCTIONS -------
 
 Unpack = function (t,i)
     i = i or 1
@@ -16,7 +20,6 @@ Unpack = function (t,i)
     end
 end
 
---Write date into the blockChain
 WriteStrkeyValueToDb = function (Strkey,ValueTbl)
     local t = type(ValueTbl)
     assert(t == "table","the type of Value isn't table.")
@@ -31,7 +34,6 @@ WriteStrkeyValueToDb = function (Strkey,ValueTbl)
     if not mylib.WriteData(writeTbl) then  error("WriteData error") end
 end
 
---get external call context
 GetContractTxParam = function (startIndex, length)
     assert(startIndex > 0, "GetContractTxParam start error(<=0).")
     assert(length > 0, "GetContractTxParam length error(<=0).")
@@ -45,16 +47,8 @@ GetContractTxParam = function (startIndex, length)
     return newTbl
 end
 
----------------------------------------------------
 
-slice_arr = function (arr, start, len)
-    local newArr = {}
-    local i = 1
-    for i = 1,len do
-        newArr[i] = arr[start+i-1]
-    end
-    return newArr
-end
+------- CUSTOM FUNCTIONS -------
 
 initialize_game = function(host_bj,guest_bj,end_date)
     local GAME_STATE = {
@@ -91,8 +85,6 @@ bet_wicc = function(target_bj)
     WriteStrkeyValueToDb("VOTE_DATA:"..nextID..":VOTER",callerAddr)
     WriteStrkeyValueToDb("VOTE_DATA:"..nextID..":AMOUNT",payAmount)
     WriteStrkeyValueToDb("VOTE_DATA:"..nextID..":TARGET",target_bj)
-
-    WriteStrkeyValueToDb("GAME_STATE:REMAIN_BALANCE",{mylib.QueryAccountBalance(Unpack({mylib.GetScriptID()}))})
 
     local vote_check = mylib.ReadData("VOTE_DATA:"..nextID..":TARGET")
 
@@ -146,6 +138,7 @@ end_game = function()
         local VOTE_AMOUNT = mylib.ByteToInteger(mylib.ReadData("VOTE_DATA:"..targetID..":AMOUNT"))
         local my_reward = math.floor(winner_pool * VOTE_AMOUNT / givenSum[winner_side]);
 
+        SendWICC({mylib.ReadData("VOTE_DATA:"..targetID..":VOTER")},{mylib.IntegerToByte8(my_reward)})
         totalRewardAmount = totalRewardAmount + my_reward
         WriteStrkeyValueToDb("GAME_RESULT:"..targetID,{mylib.IntegerToByte8(my_reward)})
     end
@@ -157,6 +150,7 @@ end_game = function()
         local VOTE_AMOUNT = mylib.ByteToInteger(mylib.ReadData("VOTE_DATA:"..targetID..":AMOUNT"))
         local my_payback = math.floor(loser_pool * VOTE_AMOUNT / givenSum[loser_side]);
 
+        SendWICC({mylib.ReadData("VOTE_DATA:"..targetID..":VOTER")},{mylib.IntegerToByte8(my_payback)})
         totalPaybackAmount = totalPaybackAmount + VOTE_AMOUNT
         WriteStrkeyValueToDb("GAME_RESULT:"..targetID,{mylib.IntegerToByte8(my_payback)})
     end
@@ -171,18 +165,15 @@ end_game = function()
     WriteStrkeyValueToDb("GAME_RESULT:TOTAL_PAYBACK",{mylib.IntegerToByte8(totalPaybackAmount)})
     WriteStrkeyValueToDb("GAME_RESULT:WAYKITV_FEE",{mylib.IntegerToByte8(fee)})
 
-    local regidTbl = {mylib.GetScriptID()}
+    -- SendWICC(SEASON_POOL_CONTRACT,{mylib.IntegerToByte8(season_pool)})
+    -- SendWICC(OUR_COMPANY_WALLET,{mylib.IntegerToByte8(fee)}))
 end
 
-GetPrizePoolBalance = function()
+SendWICC = function(addr, amount)
+    local contractAddr = {mylib.GetScriptID()}
 
-    local regidTbl = {mylib.GetScriptID()}
-    assert(#regidTbl > 0," GetScriptID err")
-
-    local balanceTbl =
-    assert(#balanceTbl == 8,"QueryAccountBalance err");
-
-    return mylib.ByteToInteger(Unpack(balanceTbl))
+    WriteAccountData(2, 1, contractAddr, amount)
+    WriteAccountData(1, 2, addr, amount)
 end
 
 WriteAccountData = function (opType, addrType, accountIdTbl, moneyTbl)
@@ -193,35 +184,27 @@ WriteAccountData = function (opType, addrType, accountIdTbl, moneyTbl)
         outHeight = 0,
         moneyTbl = moneyTbl
     }
-    assert(mylib.WriteOutput(writeOutputTbl),"WriteAccountData" .. opType .. " err")
+    assert(mylib.WriteOutput(writeOutputTbl),"WriteAccountData" .. addrType  .. opType  .. " err")
 end
 
+------- MAIN FUNCTION -------
 
-TransferToAddr = function (addrType, accTbl, moneyTbl)
-    assert(TableIsNotEmpty(accTbl), "WriteWithdrawal accTbl empty")
-    assert(TableIsNotEmpty(moneyTbl), "WriteWithdrawal moneyTbl empty")
-    WriteAccountData(OP_TYPE.ADD_FREE, addrType, accTbl, moneyTbl)
-    local appRegId = {mylib.GetScriptID()}
-    WriteAccountData(OP_TYPE.SUB_FREE, ADDR_TYPE.REGID, appRegId, moneyTbl)
-    return true
-end
-
---Entry function of smart contract
 Main = function()
-    if contract[2] == METHOD.INITIALIZE_GAME then
+    local method = contract[2]
+    if method == METHOD.INITIALIZE_GAME then
         initialize_game(
             GetContractTxParam(3,34),
             GetContractTxParam(37,34),
             GetContractTxParam(71,4)
         )
-    elseif contract[2] == METHOD.BET_WICC then
+    elseif method == METHOD.BET_WICC then
         bet_wicc( GetContractTxParam(3,1) )
-    elseif contract[2] == METHOD.END_GAME then
+    elseif method == METHOD.END_GAME then
         end_game()
-    elseif contract[2] == METHOD.TEST then
-        mylib_GetCurTxPayAmount()
+    elseif method == METHOD.TEST then
+        testSending()
     else
-        error('method# '..string.format("%02x", contract[2])..' not found')
+        error('method# '..string.format("%02x", method)..' not found')
     end
 end
 

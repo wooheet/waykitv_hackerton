@@ -28,16 +28,14 @@ router.post('/balances', async (req, res) => {
 
   let accounts = req.body.accounts;
 
-  console.log(accounts);
-  let balances = [];
-
   Promise.all(
     accounts.map(async (a) => {
       let result = await rest.account.getAccount(a);
-      balances.push(result.data.balance);
+
+      return result.data.balance;
     })
   ).then(fufilled => {
-    res.send(balances);
+    res.send(fufilled);
   }).catch(err => {
     res.status(500).send(err);
   })
