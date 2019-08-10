@@ -208,6 +208,7 @@
                           class="py-2 mt-2">
                   <v-flex ml-3 xs12 sm12 style="color: #9A9A9A">{{ value.address }}</v-flex>
                   <v-flex ml-3 xs6 sm6 style="color: #9A9A9A">{{ value.pk }}</v-flex>
+                  <v-flex ml-3 xs6 sm6 style="color: #9A9A9A">{{ value.balance / 100000000 }}</v-flex>
                 </v-layout>
               </v-card>
             </v-flex>
@@ -232,7 +233,8 @@ import {
   REGISTER_STEP3,
   GAME_INIT,
   VOTING,
-  END_GAME
+  END_GAME,
+  GET_BALANCE
 } from '../store/action-types'
 
 export default {
@@ -256,11 +258,12 @@ export default {
       'joinComplete',
       'hostroomid',
       'gameStatus',
-      'voteStatus'
+      'voteStatus',
+      'balances'
     ]),
 
     ...mapState({
-      account: 'userAccountList'
+      account: 'updateUserAccountList'
     }),
 
     ...mapGetters([
@@ -281,9 +284,6 @@ export default {
     }
   },
   methods: {
-    refreshBlcok () {
-      this.$store.dispatch(LOAD_BLOCKS)
-    },
     submit (e) {
       e.preventDefault()
       this.inputPassword = ''
@@ -328,7 +328,7 @@ export default {
 
     endGame() {
       this.$store.dispatch(END_GAME, this.endKey)
-    }
+    },
   },
 
   watch: {

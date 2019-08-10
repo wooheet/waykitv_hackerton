@@ -15,6 +15,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     login:false,
+    updateUserAccountList: [],
     userAccountList: [
       {
         address: 'wUKQ3xBxCujkE18EazfUjemY8E341FyuDL',
@@ -57,6 +58,7 @@ export default new Vuex.Store({
         pk:'Y4o9YqtqL4AifSfiiyD6dURogrcWusELak5VAqE3donVJCUFzU8j'
       },
     ],
+    balances:[],
     joinComplete:false,
     hostroomid:'',
     voteStatus:{},
@@ -93,18 +95,6 @@ export default new Vuex.Store({
     notfoundHash:'',
     notfoundPath:'',
     branchInfo: {},
-    branches: [
-      {
-        name: 'Blocks',
-        description: '',
-        link: 'yggdrash/blocks'
-      },
-      {
-        name: 'Transactions',
-        description: '',
-        link: 'yggdrash/txs'
-      }
-    ],
     currentBranch: {name: '', id: ''},
     isConnected: false
   },
@@ -304,6 +294,14 @@ export default new Vuex.Store({
       state.voteStatus = payload
     },
 
+    [mTypes.SET_BALANCES] (state, payload) {
+      state.balances = payload
+    },
+
+    [mTypes.UPDATE_USER_ACCOUNT_LIST] (state, payload) {
+      state.updateUserAccountList = payload
+    },
+
   },
 
   actions: {
@@ -356,8 +354,28 @@ export default new Vuex.Store({
       commit(mTypes.SET_LOGIN, false)
       commit(mTypes.SET_PASSWORD, '')
 
+      let accounts = []
+      state.userAccountList.forEach(r => {
+        accounts.push(r.address)
+      })
 
+      const res = await requestEs.getBalance(accounts)
+      commit(mTypes.SET_BALANCES, res.data)
 
+      for (let i in state.userAccountList) {
+        state.userAccountList[i]["balance"] = res.data[i]
+      }
+
+      commit(mTypes.UPDATE_USER_ACCOUNT_LIST, state.userAccountList)
+
+      // for (let i of state.userAccountList) {
+      //   // let balance = {
+      //   //   balance: res.data[i]
+      //   // }
+      //   // state.userAccountList[i].push(balance)
+      //   console.log(i)
+      // }
+      // console.log(state.userAccountList)
 
       // commit(mTypes.SET_WALLETINFO, walletInfo)
       // //Check if the address is valid
@@ -456,6 +474,11 @@ export default new Vuex.Store({
     async [aTypes.END_GAME] ({ commit, state }, data) {
       let hostroomid = state.hostroomid? state.hostroomid : '1111891-1'
       const res = await requestEs.endGame(data, 0, hostroomid)
+    },
+
+    async [aTypes.GET_BALANCE] ({ commit, state }, accounts) {
+      const res = await requestEs.getBalance(accounts)
+      console.log(res)
     },
 
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {

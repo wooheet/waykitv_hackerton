@@ -23,4 +23,4 @@ export const HOSTING = 'HOSTING'
 export const GAME_INIT = 'GAME_INIT'
 export const VOTING = 'VOTING'
 export const END_GAME = 'END_GAME'
-
+export const GET_BALANCE = 'GET_BALANCE'

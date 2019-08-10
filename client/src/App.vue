@@ -18,9 +18,6 @@ import Footer from './components/layout/Footer'
 import {
   SET_CURRENT_BRANCHE
 } from './store/mutation-types'
-import {
-    LOAD_ALL_DATA
-} from './store/action-types'
 
 export default {
   name: 'App',
@@ -34,17 +31,12 @@ export default {
       title: 'Wayki TV',
       drawer: true,
       miniVariant: false,
-      random
     }
   },
 
   methods: {
   },
 
-  created () {
-    this.$store.dispatch(LOAD_ALL_DATA)
-    document.title = this.title
-  },
 
   watch: {
     '$route' (to) {

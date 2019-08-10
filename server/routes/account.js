@@ -25,7 +25,6 @@ router.get('/:account', async (req, res) => {
 })
 
 router.post('/balances', async (req, res) => {
-
   let accounts = req.body.accounts;
 
   Promise.all(
