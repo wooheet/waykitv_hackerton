@@ -61,12 +61,12 @@ initialize_game = function(host_bj,guest_bj,end_date)
         STATUS_FLAG = mylib.ReadData("GAME_STATE:STATUS_FLAG")
     }
     assert(GAME_STATE.STATUS_FLAG ~= 0x01, "Game has initialized already");
-    
+
     WriteStrkeyValueToDb("GAME_STATE:STATUS_FLAG",{0x01})
     WriteStrkeyValueToDb("GAME_STATE:HOST_BJ",host_bj)
     WriteStrkeyValueToDb("GAME_STATE:GUEST_BJ",guest_bj)
     WriteStrkeyValueToDb("GAME_STATE:END_DATE",end_date)
-    
+
     WriteStrkeyValueToDb("GAME_STATE:TOTAL_VOTER",{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00})
     WriteStrkeyValueToDb("GAME_STATE:HOST_VOTER",{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00})
     WriteStrkeyValueToDb("GAME_STATE:GUEST_VOTER",{0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00})
@@ -80,19 +80,16 @@ bet_wicc = function(target_bj)
     }
     assert(GAME_STATE.STATUS_FLAG == 1, "Game should be initialized");
     -- assert(GAME_STATE.END_DATE > NOW_TIMESTAMP, "The game ended");
-    
-    local TOTAL_VOTER_int = mylib.ByteToInteger(Unpack(GAME_STATE.TOTAL_VOTER)) + 1;
-    WriteStrkeyValueToDb("GAME_STATE:TOTAL_VOTER",{mylib.IntegerToByte8(TOTAL_VOTER_int)})
-    
-    local callerAddr = {mylib.GetCurTxAccount()}
+
+    local nextID = mylib.ByteToInteger(Unpack(GAME_STATE.TOTAL_VOTER)) + 1;
+    WriteStrkeyValueToDb("GAME_STATE:TOTAL_VOTER",{mylib.IntegerToByte8(nextID)})
+
+    local callerAddr = {mylib.GetBase58Addr(mylib.GetCurTxAccount())}
     local payAmount = {mylib.GetCurTxPayAmount()}
-    
-    local insertTable = {};
-    for i=1,6 do insertTable[i] = callerAddr[i] end
-    for i=1,8 do insertTable[i+6] = payAmount[i] end
-    insertTable[15] = target_bj[1]
-    
-    WriteStrkeyValueToDb("VOTE_DATA:"..TOTAL_VOTER_int,insertTable)
+
+    WriteStrkeyValueToDb("VOTE_DATA:"..nextID..":VOTER",callerAddr)
+    WriteStrkeyValueToDb("VOTE_DATA:"..nextID..":AMOUNT",payAmount)
+    WriteStrkeyValueToDb("VOTE_DATA:"..nextID..":TARGET",target_bj)
 end
 
 end_game = function()
@@ -103,53 +100,105 @@ end_game = function()
     }
     assert(GAME_STATE.STATUS_FLAG == 1, "The game has ended already or hasnt initialized");
     -- assert(GAME_STATE.END_DATE < NOW_TIMESTAMP, "The time is not done yet");
-    
+    local voter_list = { host = {}, guest = {} }
+    local givenSum = { host = 0, guest = 0 };
     for i=1,mylib.ByteToInteger(Unpack(GAME_STATE.TOTAL_VOTER)) do
-        local VOTE_DATA = {mylib.ReadData("VOTE_DATA:"..i)};
-        local VOTE_DATA_VOTER = slice_arr(VOTE_DATA,1,6);
-        local VOTE_DATA_AMOUNT = slice_arr(VOTE_DATA,7,8);
-        local VOTE_DATA_TARGET = slice_arr(VOTE_DATA,15,1);
-        WriteStrkeyValueToDb("VOTE_DATA:"..i..":VOTER",VOTE_DATA_VOTER)
-        WriteStrkeyValueToDb("VOTE_DATA:"..i..":AMOUNT",VOTE_DATA_AMOUNT)
-        WriteStrkeyValueToDb("VOTE_DATA:"..i..":TARGET",VOTE_DATA_TARGET)
+        local VOTE_DATA = {
+            VOTER = mylib.ReadData("VOTE_DATA:"..i..":VOTER"),
+            AMOUNT = mylib.ByteToInteger(mylib.ReadData("VOTE_DATA:"..i..":AMOUNT")),
+            TARGET = mylib.ReadData("VOTE_DATA:"..i..":TARGET")
+        };
+        local voten_side = (VOTE_DATA.TARGET == 1) and "host" or "guest"
+        givenSum[voten_side] = givenSum[voten_side] + VOTE_DATA.AMOUNT
+        voter_list[voten_side][#voter_list[voten_side] + 1] = i
     end
-    
+
+    local RESULT_WINNER = (givenSum.host > givenSum.guest) and 0x01 or 0x02;
+    local winner_side = RESULT_WINNER==0x01 and "host" or "guest";
+    local loser_side = RESULT_WINNER==0x01 and "guest" or "host";
+
+    WriteStrkeyValueToDb("GAME_RESULT:WINNER",{RESULT_WINNER})
+
+    local total_bet = givenSum.host + givenSum.guest;
+    local winner_reward = math.floor(total_bet * 0.1);
+    local season_pool = math.floor(total_bet * 0.03);
+    local winner_pool = math.floor(total_bet * 0.7);
+    local loser_pool = math.floor(total_bet * 0.15);
+
+    local totalRewardAmount = 0;
+    for i=1,#voter_list[winner_side] do
+        if(#voter_list[winner_side]<1) then break end
+        local targetID = voter_list[winner_side][i]
+        local VOTE_AMOUNT = mylib.ByteToInteger(mylib.ReadData("VOTE_DATA:"..targetID..":AMOUNT"))
+        local my_reward = math.floor(winner_pool * VOTE_AMOUNT / givenSum[winner_side]);
+
+        totalRewardAmount = totalRewardAmount + my_reward
+        WriteStrkeyValueToDb("GAME_RESULT:"..targetID,{mylib.IntegerToByte8(my_reward)})
+    end
+
+    WriteStrkeyValueToDb("GAME_RESULT:REWARDS",{mylib.IntegerToByte8(totalRewardAmount)})
+
+    local totalPaybackAmount = 0;
+    for i=1,#voter_list[loser_side] do
+        if(#voter_list[loser_side]<1) then break end
+        local targetID = voter_list[loser_side][i]
+        local VOTE_AMOUNT = mylib.ByteToInteger(mylib.ReadData("VOTE_DATA:"..targetID..":AMOUNT"))
+        local my_payback = math.floor(loser_pool * VOTE_AMOUNT / givenSum[loser_side]);
+
+        totalPaybackAmount = totalPaybackAmount + VOTE_AMOUNT
+        WriteStrkeyValueToDb("GAME_RESULT:"..targetID,{mylib.IntegerToByte8(my_payback)})
+    end
+
+    WriteStrkeyValueToDb("GAME_RESULT:PAYBACK",{mylib.IntegerToByte8(totalPaybackAmount)})
+
+    local fee = Math.floor(total_bet - winner_reward - season_pool - totalRewardAmount - totalPaybackAmount)
+
+    WriteStrkeyValueToDb("GAME_RESULT:TOTAL_BET",{mylib.IntegerToByte8(total_bet)})
+    WriteStrkeyValueToDb("GAME_RESULT:WINNER_EARN",{mylib.IntegerToByte8(winner_reward)})
+    WriteStrkeyValueToDb("GAME_RESULT:SEASON_POOL",{mylib.IntegerToByte8(season_pool)})
+    WriteStrkeyValueToDb("GAME_RESULT:TOTAL_REWARDS",{mylib.IntegerToByte8(totalRewardAmount)})
+    WriteStrkeyValueToDb("GAME_RESULT:TOTAL_PAYBACK",{mylib.IntegerToByte8(totalPaybackAmount)})
+    WriteStrkeyValueToDb("GAME_RESULT:WAYKITV_FEE",{mylib.IntegerToByte8(fee)})
 end
 
 storage = function ()
-    
+        assert(false, "voten_side : "..voten_side..", voten_side_b : "..voten_side_b)
+    for i=1,#voter_list[winner_side] do
+        totalRewardAmount = totalRewardAmount + voter_list[winner_side][i].AMOUNT
+    end
+
     WriteStrkeyValueToDb("RESULT_LOG:WINNER_BJ",test)
 end
 
-test = function(args) 
+test = function(args)
     WriteStrkeyValueToDb("TEST",args)
 end
 
 --Entry function of smart contract
 Main = function()
-    
+
     if contract[2] == METHOD.INITIALIZE_GAME then
         initialize_game(
-            GetContractTxParam(3,6),
-            GetContractTxParam(9,6),
-            GetContractTxParam(15,6)
+            GetContractTxParam(3,17),
+            GetContractTxParam(20,17),
+            GetContractTxParam(37,4)
         )
-        
+
     elseif contract[2] == METHOD.BET_WICC then
         bet_wicc(
             GetContractTxParam(3,1)
         )
-        
+
     elseif contract[2] == METHOD.END_GAME then
         end_game()
-        
+
     elseif contract[2] == METHOD.TEST then
         mylib_GetCurTxPayAmount()
-        
+
     else
         error('method# '..string.format("%02x", contract[2])..' not found')
     end
-    
+
 end
 
 Main()

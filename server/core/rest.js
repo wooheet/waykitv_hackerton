@@ -32,12 +32,13 @@ let account = {
         address: account
       }).then(response => {
         if (response.data) {
-          logger.info(response.data);
+          // logger.info(response.data);
           resolve(response.data);
         } else
           reject(response);
       }).catch(error => {
         logger.error(error);
+        reject(error);
       })
     })
   }
