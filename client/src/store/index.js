@@ -48,15 +48,7 @@ export default new Vuex.Store({
       {
         address: 'wQhcuvjtJj6XCxN6XSJ1wyyVRbpc96DweJ',
         pk:'Y9ynYbPPFwy4DBJdpFY6ca7tAF5Met5g5c7saRJ16NgF3yWYt1zm'
-      },
-      {
-        address: 'wWDQ2BMEJLAYB5xMZSKFTTm6s3zRwy2WG9',
-        pk:'YBH5ZkC3WEmpzjU7ChVvsvzTZmXjWFY97QmAqeo54d1sUeUWXZXb'
-      },
-      {
-        address: 'wQnxurYKYkDaZCEJQWCCTUBkUopQiKDtBG',
-        pk:'Y4o9YqtqL4AifSfiiyD6dURogrcWusELak5VAqE3donVJCUFzU8j'
-      },
+      }
     ],
     balances:[],
     joinComplete:false,
@@ -96,7 +88,8 @@ export default new Vuex.Store({
     notfoundPath:'',
     branchInfo: {},
     currentBranch: {name: '', id: ''},
-    isConnected: false
+    isConnected: false,
+    rewardResult:{}
   },
 
   mutations: {
@@ -302,6 +295,9 @@ export default new Vuex.Store({
       state.updateUserAccountList = payload
     },
 
+    [mTypes.SET_REWARD_RESULT] (state, payload) {
+      state.rewardResult = payload
+    },
   },
 
   actions: {
@@ -460,8 +456,7 @@ export default new Vuex.Store({
         var CronJob = require('cron').CronJob;
         new CronJob('*/5 * * * * *', async function() {
           const res = await requestEs.gameStatus(hostroomid)
-          console.log(res)
-          // commit(mTypes.SET_VOTING_STATUS, res.data)
+          commit(mTypes.SET_VOTING_STATUS, res.data)
         }, null, true, 'America/Los_Angeles');
       }
     },
@@ -474,17 +469,8 @@ export default new Vuex.Store({
     async [aTypes.END_GAME] ({ commit, state }, data) {
       let hostroomid = state.hostroomid? state.hostroomid : '1111891-1'
       const res = await requestEs.endGame(data, 0, hostroomid)
-
-
-      if (res.statusText === 'OK') {
-        var CronJob = require('cron').CronJob;
-        new CronJob('*/5 * * * * *', async function() {
-          const res = await requestEs.gameResult(hostroomid)
-          console.log(res)
-          commit(mTypes.SET_VOTING_STATUS, res.data)
-        }, null, true, 'America/Los_Angeles');
-      }
-
+      const result = await requestEs.gameResult(hostroomid)
+      commit(mTypes.SET_REWARD_RESULT, result.data)
     },
 
     async [aTypes.GET_BALANCE] ({ commit, state }, accounts) {
