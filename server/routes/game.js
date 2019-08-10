@@ -173,9 +173,9 @@ router.post('/vote', async (req, res) => {
   }
 });
 
-router.get('/end', async (req, res) => {
+router.post('/end', async (req, res) => {
   let key = req.body.key;
-  let value = req.body.value | 0;
+  let value = req.body.value | 3;
   let contract = req.body.contract;
     let privateKey = wicc.PrivateKey.fromWIF(key)
     let account = privateKey.toAddress().toString()
