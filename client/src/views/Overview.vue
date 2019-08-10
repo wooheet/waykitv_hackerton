@@ -222,7 +222,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <script>
 import { mapState, mapGetters } from 'vuex'
-import RecentBlockWidget from '../components/RecentBlockWidget'
 import Login from '../components/Login'
 import {
   HOSTING,
@@ -233,13 +232,11 @@ import {
   REGISTER_STEP3,
   GAME_INIT,
   VOTING,
-  END_GAME,
-  GET_BALANCE
+  END_GAME
 } from '../store/action-types'
 
 export default {
   components: {
-    RecentBlockWidget,
     Login,
   },
   computed: {
