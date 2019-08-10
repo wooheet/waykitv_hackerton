@@ -115,11 +115,24 @@ export async function hosting (pk) {
 }
 
 export async function queryHosting (hash) {
-  // let res = await request.get(`${API_HOST}/game/number${hash}`, {useCache: false})
+  let res = await request.get(`${API_HOST}/game/number/${hash}`, {useCache: false})
+  // let res = await request.get(`${API_HOST}/game/number/d4b016f469e7d3f46927c131869f603180995909f7db79cbf6fe21f134919d1b`, {useCache: false})
+  return res.data
+}
 
-  let res = await request.get(`${API_HOST}/game/number/d4b016f469e7d3f46927c131869f603180995909f7db79cbf6fe21f134919d1b`, {useCache: false})
+export async function gameInit (c, h, g) {
+  let res = await request.post(`${API_HOST}/game/init`,{contract: c, host: h, guest: g}, {useCache: false})
   return res
 }
 
+export async function gameStatus (c) {
+  let res = await request.post(`${API_HOST}/game`,{contract: c}, {useCache: false})
+  return res
+}
+
+export async function voting (k,v,c,t) {
+  let res = await request.post(`${API_HOST}/game/vote`,{key: k, value: v, contract: c, target: t}, {useCache: false})
+  return res
+}
 
 const API_HOST = '/api'

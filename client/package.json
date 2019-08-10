@@ -1,7 +1,7 @@
 {
-  "name": "YggdrashExplorerClient",
+  "name": "waykitv",
   "version": "1.0.0",
-  "description": "Yggdrash Network Explorer",
+  "description": "waykitv",
   "author": "Lucas <lucas@r2v.io>",
   "private": true,
   "scripts": {

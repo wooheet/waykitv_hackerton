@@ -118,21 +118,67 @@
                   </v-form>
                   <v-btn round v-on:click="hosting()" flat class="white--text">
                     CREATE HOSTING ROOM</v-btn>
+                  <span class="title font-weight-medium mb-2 ml-3 white--text">{{hostroomid}}</span>
                 </v-flex>
                 <v-flex mb-5>
-                  <v-form @submit.prevent="submit">
-                    <v-text-field
-                      dark
-                      v-model="votingKey"
-                      class="generateTxKey"
-                      counter="130"
-                      hide-details
-                      placeholder="KEY"
-                      @click:append="submit"
-                    ></v-text-field>
-                  </v-form>
-                  <v-btn round  flat class="white--text">
-                    VOTING</v-btn>
+                  <v-layout wrap>
+                    <v-form @submit.prevent="submit">
+                      <v-text-field
+                        dark
+                        v-model="guestKey1"
+                        class="guestKey"
+                        counter="130"
+                        hide-details
+                        placeholder="KEY"
+                        @click:append="submit"
+                      ></v-text-field>
+                    </v-form>
+                    <v-form @submit.prevent="submit">
+                      <v-text-field
+                        dark
+                        v-model="guestKey2"
+                        class="guestKey"
+                        counter="130"
+                        hide-details
+                        placeholder="Address"
+                        @click:append="submit"
+                      ></v-text-field>
+                    </v-form>
+                  </v-layout>
+                  <v-btn round v-on:click="gameStart()" flat class="white--text">
+                    GAME START</v-btn>
+                  <span class="title font-weight-medium mb-2 ml-3 white--text">{{gameStatus}}</span>
+                </v-flex>
+                <v-flex mb-5>
+                  <v-layout wrap>
+                    <v-form @submit.prevent="submit">
+                      <v-text-field
+                        dark
+                        v-model="votingKey"
+                        class="voteKey"
+                        counter="130"
+                        hide-details
+                        placeholder="KEY"
+                        @click:append="submit"
+                      ></v-text-field>
+                    </v-form>
+                    <v-form @submit.prevent="submit">
+                      <v-text-field
+                        dark
+                        v-model="votingValue"
+                        class="voteKey"
+                        counter="130"
+                        hide-details
+                        placeholder="VALUE"
+                        @click:append="submit"
+                      ></v-text-field>
+                    </v-form>
+                  </v-layout>
+                  <v-btn round  flat v-on:click="voting('host')" class="white--text">
+                    VOTING(HOST)</v-btn>
+                  <v-btn round  flat v-on:click="voting('guest')" class="white--text">
+                    VOTING(GUEST)</v-btn>
+                  <span class="title font-weight-medium mb-2 ml-3 white--text">{{voteStatus}}</span>
                 </v-flex>
                 <v-flex mb-5>
                   <v-form @submit.prevent="submit">
@@ -156,13 +202,12 @@
             <v-flex mb-0 >
               <v-card class="transaction-history">
                 <span class="title font-weight-medium ml-3 white--text mb-5">USER TEST KEY LIST</span>
-                <!--<span class="title font-weight-medium ml-3 white&#45;&#45;text">{{account}}</span>-->
                 <v-layout row
                           wrap
                           v-for="(value, props) in account" :key="props"
                           class="py-2 mt-2">
-                  <v-flex xs12 sm12 style="color: #9A9A9A">{{ value.address }}</v-flex>
-                  <v-flex xs6 sm6 style="color: #9A9A9A">{{ value.pk }}</v-flex>
+                  <v-flex ml-3 xs12 sm12 style="color: #9A9A9A">{{ value.address }}</v-flex>
+                  <v-flex ml-3 xs6 sm6 style="color: #9A9A9A">{{ value.pk }}</v-flex>
                 </v-layout>
               </v-card>
             </v-flex>
@@ -184,7 +229,9 @@ import {
   LOGIN_STEP1,
   REGISTER_STEP1,
   REGISTER_STEP2,
-  REGISTER_STEP3
+  REGISTER_STEP3,
+  GAME_INIT,
+  VOTING
 } from '../store/action-types'
 
 export default {
@@ -205,7 +252,10 @@ export default {
       'register_step1',
       'register_step2',
       'register_step3',
-      'joinComplete'
+      'joinComplete',
+      'hostroomid',
+      'gameStatus',
+      'voteStatus'
     ]),
 
     ...mapState({
@@ -224,6 +274,9 @@ export default {
       hostingKey:'',
       votingKey:'',
       endKey:'',
+      guestKey1:'',
+      guestKey2:'',
+      votingValue:''
     }
   },
   methods: {
@@ -253,9 +306,24 @@ export default {
 
     hosting () {
       this.$store.dispatch(HOSTING, this.hostingKey)
+    },
+
+    gameStart () {
+      let accounts = {
+        guestKey1: this.guestKey1,
+        guestKey2: this.guestKey2
+      }
+      this.$store.dispatch(GAME_INIT, accounts)
+    },
+
+    voting(who) {
+      let data = {
+        key: this.votingKey,
+        value: this.votingValue,
+        target: who
+      }
+      this.$store.dispatch(VOTING, data)
     }
-
-
   },
 
   watch: {
@@ -289,11 +357,11 @@ export default {
   }
   .transaction-history {
     background-color: rgba(66, 66, 66, 0.3);
-    height: 700px;
+    height: 750px;
   }
   .network-info {
     background-color: rgba(66, 66, 66, 0.3);
-    height: 700px;
+    height: 750px;
   }
   .refresh {
     margin-top: -2px;
@@ -314,6 +382,16 @@ export default {
     margin-left:15px;
     margin-bottom:20px;
     width:350px;
+  }
+  .guestKey {
+    margin-left:15px;
+    margin-bottom:20px;
+    width:300px;
+  }
+  .voteKey {
+    margin-left:15px;
+    margin-bottom:20px;
+    width:300px;
   }
 </style>
 

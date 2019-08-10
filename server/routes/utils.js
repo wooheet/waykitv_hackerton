@@ -7,7 +7,7 @@ function createTx(accountId, height, contractId, value, message) {
     nValidHeight: height,    // create height
     srcRegId: accountId,    // sender's regId
     destRegId: contractId,  // app regId
-    fees: 1000000,         // fees pay for miner
+    fees: 3000000,         // fees pay for miner
     value: value * 100000000,              // amount of WICC to be sent to the app account
     vContract: message      // contract method, hex format string
   }
@@ -22,7 +22,7 @@ function createGame(accountId, height, script) {
     regAcctId: accountId,      // sender's regId
     script: script,            // contract scrypt content, string or buf
     scriptDesc: "",            // contract scrypt description, string or buf
-    fees: 100000000,           // fees pay for miner
+    fees: 500000000,           // fees pay for miner
   };
 }
 
