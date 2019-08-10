@@ -229,7 +229,7 @@ router.post('/result', async (req, res) => {
   await rest.tx.getGameData(payback)
     .then(resp => {
       // console.log(resp);
-      result.payback = resp.data.value;
+      result.payback = resp.data.value / 10000000;
     })
     .catch(error => {
       console.log(error);
@@ -239,7 +239,7 @@ router.post('/result', async (req, res) => {
   await rest.tx.getGameData(reward)
     .then(resp => {
       // console.log(resp);
-      result.reward = resp.data.value;
+      result.reward = resp.data.value / 10000000;
     })
     .catch(error => {
       console.log(error);
@@ -249,7 +249,6 @@ router.post('/result', async (req, res) => {
   await rest.tx.getGameData(winner)
     .then(resp => {
       // console.log(resp);
-      console.log(typeof resp.data.value);
       if (resp.data.value === '01') {
         result.winner = 'host';
       } else if (resp.data.value === '02') {
