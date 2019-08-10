@@ -7,7 +7,7 @@ function createTx(accountId, height, contractId, value, message) {
     nValidHeight: height,    // create height
     srcRegId: accountId,    // sender's regId
     destRegId: contractId,  // app regId
-    fees: 3000000,         // fees pay for miner
+    fees: 5000000,         // fees pay for miner
     value: value * 100000000,              // amount of WICC to be sent to the app account
     vContract: message      // contract method, hex format string
   }

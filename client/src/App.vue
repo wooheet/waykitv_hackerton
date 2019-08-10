@@ -30,9 +30,8 @@ export default {
   },
 
   data () {
-    let random = Math.floor(Math.random() * 6) + 1
     return {
-      title: 'YGGDRASH Explorer',
+      title: 'Wayki TV',
       drawer: true,
       miniVariant: false,
       random
@@ -40,9 +39,6 @@ export default {
   },
 
   methods: {
-    randomBackground() {
-      return `contents${this.random}`
-    }
   },
 
   created () {
