@@ -461,7 +461,7 @@ export default new Vuex.Store({
         new CronJob('*/5 * * * * *', async function() {
           const res = await requestEs.gameStatus(hostroomid)
           console.log(res)
-          commit(mTypes.SET_VOTING_STATUS, res.data)
+          // commit(mTypes.SET_VOTING_STATUS, res.data)
         }, null, true, 'America/Los_Angeles');
       }
     },
@@ -474,6 +474,17 @@ export default new Vuex.Store({
     async [aTypes.END_GAME] ({ commit, state }, data) {
       let hostroomid = state.hostroomid? state.hostroomid : '1111891-1'
       const res = await requestEs.endGame(data, 0, hostroomid)
+
+
+      if (res.statusText === 'OK') {
+        var CronJob = require('cron').CronJob;
+        new CronJob('*/5 * * * * *', async function() {
+          const res = await requestEs.gameResult(hostroomid)
+          console.log(res)
+          commit(mTypes.SET_VOTING_STATUS, res.data)
+        }, null, true, 'America/Los_Angeles');
+      }
+
     },
 
     async [aTypes.GET_BALANCE] ({ commit, state }, accounts) {

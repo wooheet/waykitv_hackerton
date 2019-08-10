@@ -140,6 +140,11 @@ export async function endGame (k,v,c) {
   return res
 }
 
+export async function gameResult(c) {
+  let res = await request.post(`${API_HOST}/game/result`, {contract: c})
+  return res;
+}
+
 export async function getBalance (accounts) {
   let res = await request.post(`${API_HOST}/account/balances`,{accounts: accounts}, {useCache: false})
   return res
