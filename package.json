@@ -18,40 +18,11 @@
     "address": {
       "ip": "0.0.0.0",
       "port": 3000
-    },
-    "es": {
-      "nodes": [
-        "http://52.79.86.55:9200"
-      ],
-      "prefix": "yggdrash-",
-      "index": {
-        "block": "block",
-        "tx": "tx"
-      }
-    },
-    "yggdrash": {
-      "node": {
-        "proxy": {
-          "protocol": "http://",
-          "ip": "13.209.81.235",
-          "port": "8080"
-        }
-      },
-      "branch": {
-        "id": "63589382e2e183e2a6969ebf57bd784dcb29bd43"
-      },
-      "contract": {
-        "version": "6a2371e34b780dd39bd56002b1d96c23689cc5dc",
-        "name": "YEED"
-      }
     }
   },
   "dependencies": {
-    "@elastic/elasticsearch": "^7.1.0",
-    "@yggdrash/sdk": "^0.2.1",
     "axios": "^0.18.0",
     "axios-extensions": "^3.0.6",
-    "bignumber.js": "^9.0.0",
     "body-parser": "^1.19.0",
     "chalk": "^2.4.2",
     "clui": "^0.3.6",

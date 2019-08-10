@@ -6,8 +6,7 @@ mylib = require "mylib"
 METHOD = {
     INITIALIZE_GAME  = 0x01,
     BET_WICC = 0x02,
-    END_GAME = 0x03,
-    TEST = 0x04
+    END_GAME = 0x03
 }
 
 
@@ -201,8 +200,6 @@ Main = function()
         bet_wicc( GetContractTxParam(3,1) )
     elseif method == METHOD.END_GAME then
         end_game()
-    elseif method == METHOD.TEST then
-        testSending()
     else
         error('method# '..string.format("%02x", method)..' not found')
     end

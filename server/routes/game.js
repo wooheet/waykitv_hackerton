@@ -86,17 +86,13 @@ router.post('/hosting', async (req, res) => {
 
     res.send(txHash.data.hash);
 
-    // let contractId = await rest.contract.getContractId(txHash.data.hash);
-    // console.log(contractId);
-    // console.log(txHash);
-
   } catch (e) {
     console.error(e);
   }
 });
 
 router.post('/init', async (req, res) => {
-  let contract = req.body.contract; //1111137-1
+  let contract = req.body.contract;
   var privateKey = wicc.PrivateKey.fromWIF(req.body.host)
   let guest = req.body.guest;
   let pkaddr = privateKey.toAddress();
