@@ -121,7 +121,7 @@
                   <span class="title font-weight-medium mb-2 ml-3 white--text">{{hostroomid}}</span>
                 </v-flex>
                 <v-flex mb-5>
-                  <v-flex>
+                  <v-layout wrap>
                     <v-form @submit.prevent="submit">
                       <v-text-field
                         dark
@@ -129,7 +129,7 @@
                         class="guestKey"
                         counter="130"
                         hide-details
-                        placeholder="Address"
+                        placeholder="KEY"
                         @click:append="submit"
                       ></v-text-field>
                     </v-form>
@@ -144,25 +144,41 @@
                         @click:append="submit"
                       ></v-text-field>
                     </v-form>
-                  </v-flex>
+                  </v-layout>
                   <v-btn round v-on:click="gameStart()" flat class="white--text">
                     GAME START</v-btn>
                   <span class="title font-weight-medium mb-2 ml-3 white--text">{{gameStatus}}</span>
                 </v-flex>
                 <v-flex mb-5>
-                  <v-form @submit.prevent="submit">
-                    <v-text-field
-                      dark
-                      v-model="votingKey"
-                      class="generateTxKey"
-                      counter="130"
-                      hide-details
-                      placeholder="KEY"
-                      @click:append="submit"
-                    ></v-text-field>
-                  </v-form>
-                  <v-btn round  flat class="white--text">
-                    VOTING</v-btn>
+                  <v-layout wrap>
+                    <v-form @submit.prevent="submit">
+                      <v-text-field
+                        dark
+                        v-model="votingKey"
+                        class="voteKey"
+                        counter="130"
+                        hide-details
+                        placeholder="KEY"
+                        @click:append="submit"
+                      ></v-text-field>
+                    </v-form>
+                    <v-form @submit.prevent="submit">
+                      <v-text-field
+                        dark
+                        v-model="votingValue"
+                        class="voteKey"
+                        counter="130"
+                        hide-details
+                        placeholder="VALUE"
+                        @click:append="submit"
+                      ></v-text-field>
+                    </v-form>
+                  </v-layout>
+                  <v-btn round  flat v-on:click="voting('host')" class="white--text">
+                    VOTING(HOST)</v-btn>
+                  <v-btn round  flat v-on:click="voting('guest')" class="white--text">
+                    VOTING(GUEST)</v-btn>
+                  <span class="title font-weight-medium mb-2 ml-3 white--text">{{voteStatus}}</span>
                 </v-flex>
                 <v-flex mb-5>
                   <v-form @submit.prevent="submit">
@@ -214,7 +230,8 @@ import {
   REGISTER_STEP1,
   REGISTER_STEP2,
   REGISTER_STEP3,
-  GAME_INIT
+  GAME_INIT,
+  VOTING
 } from '../store/action-types'
 
 export default {
@@ -237,7 +254,8 @@ export default {
       'register_step3',
       'joinComplete',
       'hostroomid',
-      'gameStatus'
+      'gameStatus',
+      'voteStatus'
     ]),
 
     ...mapState({
@@ -258,6 +276,7 @@ export default {
       endKey:'',
       guestKey1:'',
       guestKey2:'',
+      votingValue:''
     }
   },
   methods: {
@@ -295,9 +314,16 @@ export default {
         guestKey2: this.guestKey2
       }
       this.$store.dispatch(GAME_INIT, accounts)
+    },
+
+    voting(who) {
+      let data = {
+        key: this.votingKey,
+        value: this.votingValue,
+        target: who
+      }
+      this.$store.dispatch(VOTING, data)
     }
-
-
   },
 
   watch: {
@@ -358,6 +384,11 @@ export default {
     width:350px;
   }
   .guestKey {
+    margin-left:15px;
+    margin-bottom:20px;
+    width:300px;
+  }
+  .voteKey {
     margin-left:15px;
     margin-bottom:20px;
     width:300px;

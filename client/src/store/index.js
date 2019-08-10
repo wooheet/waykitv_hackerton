@@ -59,6 +59,7 @@ export default new Vuex.Store({
     ],
     joinComplete:false,
     hostroomid:'',
+    voteStatus:{},
     register:false,
     passwordView:true,
     register_step1:false,
@@ -299,6 +300,10 @@ export default new Vuex.Store({
       state.gameStatus = payload
     },
 
+    [mTypes.SET_VOTING_STATUS] (state, payload) {
+      state.voteStatus = payload
+    },
+
   },
 
   actions: {
@@ -429,7 +434,7 @@ export default new Vuex.Store({
     },
 
     async [aTypes.GAME_INIT] ({ commit, state }, accounts) {
-      let hostroomid = state.hostroomid? state.hostroomid : '1111412-1'
+      let hostroomid = state.hostroomid? state.hostroomid : '1111632-1'
       const res = await requestEs.gameInit(hostroomid, accounts.guestKey1, accounts.guestKey2)
       commit(mTypes.SET_GAME_START_STATUS, res.statusText)
 
@@ -438,10 +443,15 @@ export default new Vuex.Store({
         new CronJob('*/5 * * * * *', async function() {
           const res = await requestEs.gameStatus(hostroomid)
           console.log(res)
+          commit(mTypes.SET_VOTING_STATUS, res.data)
         }, null, true, 'America/Los_Angeles');
       }
     },
 
+    async [aTypes.VOTING] ({ commit, state }, data) {
+      let hostroomid = state.hostroomid? state.hostroomid : '1111632-1'
+      const res = await requestEs.voting(data.key, data.value, hostroomid, data.target)
+    },
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {
       try {
       const res = await requestEs.getNetworkStatus()

@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
 
   await rest.tx.getGameData(hostVote)
     .then(resp => {
-      console.log(resp);
+      // console.log(resp);
       result.host = resp.data.value;
     })
     .catch(error => {
@@ -43,7 +43,7 @@ router.post('/', async (req, res) => {
 
   await rest.tx.getGameData(guestVote)
     .then(resp => {
-      console.log(resp);
+      // console.log(resp);
       result.guest = resp.data.value;
     })
     .catch(error => {
@@ -97,10 +97,10 @@ router.post('/hosting', async (req, res) => {
 
 router.post('/init', async (req, res) => {
   let contract = req.body.contract; //1111137-1
-  let host = req.body.host;
+  var privateKey = wicc.PrivateKey.fromWIF(req.body.host)
   let guest = req.body.guest;
-  // let privateKey = wicc.PrivateKey.fromWIF(req.body.privateKey);
-
+  let pkaddr = privateKey.toAddress();
+  let host = pkaddr.toString()
 
 
   try {
@@ -112,8 +112,6 @@ router.post('/init', async (req, res) => {
     let txBody = util.createTx(userInfo.data.regid, block.data, contract, 0, message);
 
     console.log(txBody);
-
-    var privateKey = wicc.PrivateKey.fromWIF('Y9x4iimB6AYp3b73nRzaJHHZdEHcwb1A61LVyvpXVTgfbbdUj172')
 
     let rawTx = wiccApi.createSignTransaction(privateKey, 4, txBody);
 
@@ -147,13 +145,12 @@ router.get('/number/:hash', async (req, res) => {
 
 
 router.post('/vote', async (req, res) => {
-  let account = req.body.account;
+  let key = req.body.key;
   let value = req.body.value;
   let contract = req.body.contract;
   let target = req.body.target;
-
-  console.log(account);
-  console.log(contract);
+  let privateKey = wicc.PrivateKey.fromWIF(key)
+  let account = privateKey.toAddress().toString()
 
   try {
     let userInfo = await rest.account.getAccount(account);
@@ -162,8 +159,6 @@ router.post('/vote', async (req, res) => {
     let message = util.voteMessage(target);
 
     let txBody = util.createTx(userInfo.data.regid, block.data, contract, value, message);
-
-    var privateKey = wicc.PrivateKey.fromWIF('Y9x4iimB6AYp3b73nRzaJHHZdEHcwb1A61LVyvpXVTgfbbdUj172')
 
     let rawTx = wiccApi.createSignTransaction(privateKey, 4, txBody);
 

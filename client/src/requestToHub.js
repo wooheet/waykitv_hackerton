@@ -130,4 +130,9 @@ export async function gameStatus (c) {
   return res
 }
 
+export async function voting (k,v,c,t) {
+  let res = await request.post(`${API_HOST}/game/vote`,{key: k, value: v, contract: c, target: t}, {useCache: false})
+  return res
+}
+
 const API_HOST = '/api'

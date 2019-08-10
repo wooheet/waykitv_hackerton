@@ -21,4 +21,5 @@ export const REGISTER_STEP2 = 'REGISTER_STEP2'
 export const REGISTER_STEP3 = 'REGISTER_STEP3'
 export const HOSTING = 'HOSTING'
 export const GAME_INIT = 'GAME_INIT'
+export const VOTING = 'VOTING'
 
