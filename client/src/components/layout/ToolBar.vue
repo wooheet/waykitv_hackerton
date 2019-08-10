@@ -28,7 +28,7 @@
           </v-flex>
           <v-flex v-else>
             <span class="menu mr-3 mt-2" style="float: right" @click="logout" >
-              LOOUT
+              LOGOUT
             </span>
             <span class="menu mr-3 mt-2" style="float: right"  >
               {{ address }}

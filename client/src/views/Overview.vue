@@ -223,10 +223,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Login from '../components/Login'
 import {
   HOSTING,
-  LOAD_BLOCKS,
   LOGIN_STEP1,
   REGISTER_STEP1,
   REGISTER_STEP2,
@@ -237,9 +235,7 @@ import {
 } from '../store/action-types'
 
 export default {
-  components: {
-    Login,
-  },
+
   computed: {
     ...mapState([
       'blocks',
@@ -332,7 +328,7 @@ export default {
 
   watch: {
     '$route' (to) {
-      this.$store.dispatch(LOAD_BLOCKS)
+
     },
   },
 }
