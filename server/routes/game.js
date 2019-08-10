@@ -202,6 +202,73 @@ router.post('/end', async (req, res) => {
     console.error(e);
   }
 
+})
+
+router.post('/result', async (req, res) => {
+  console.log("game req.body.contract", req.body.contract);
+  let payback = {
+    key: constants.PAYBACK,
+    regid: req.body.contract,
+    returndatatype: 'NUMBER'
+  };
+
+  let reward = {
+    key: constants.REWARD,
+    regid: req.body.contract,
+    returndatatype: 'NUMBER'
+  };
+
+  let winner = {
+    key: constants.WINNER,
+    regid: req.body.contract,
+    returndatatype: 'HEX'
+  };
+
+  let result = {
+    payback: undefined,
+    reward: undefined,
+    winner: undefined
+  };
+
+  await rest.tx.getGameData(payback)
+    .then(resp => {
+      // console.log(resp);
+      result.payback = resp.data.value;
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).send(error);
+    })
+
+  await rest.tx.getGameData(reward)
+    .then(resp => {
+      // console.log(resp);
+      result.reward = resp.data.value;
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).send(error);
+    })
+
+  await rest.tx.getGameData(winner)
+    .then(resp => {
+      // console.log(resp);
+      console.log(typeof resp.data.value);
+      if (resp.data.value === '01') {
+        result.winner = 'host';
+      } else if (resp.data.value === '02') {
+        result.winner = 'guest';
+      } else {
+        result.winner = ''
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).send(error);
+    })
+
+  // result['total'] = result.host + result.guest;
+  res.status(200).send(result);
 
 })
 
