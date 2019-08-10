@@ -192,7 +192,7 @@
                       @click:append="submit"
                     ></v-text-field>
                   </v-form>
-                  <v-btn round  flat class="white--text">
+                  <v-btn round  flat v-on:click="endGame()"  class="white--text">
                     END</v-btn>
                 </v-flex>
               </v-card>
@@ -231,7 +231,8 @@ import {
   REGISTER_STEP2,
   REGISTER_STEP3,
   GAME_INIT,
-  VOTING
+  VOTING,
+  END_GAME
 } from '../store/action-types'
 
 export default {
@@ -323,6 +324,10 @@ export default {
         target: who
       }
       this.$store.dispatch(VOTING, data)
+    },
+
+    endGame() {
+      this.$store.dispatch(END_GAME, this.endKey)
     }
   },
 

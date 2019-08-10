@@ -174,9 +174,11 @@ router.post('/vote', async (req, res) => {
 });
 
 router.get('/end', async (req, res) => {
-  let account = req.body.account;
-  let value = req.body.value;
+  let key = req.body.key;
+  let value = req.body.value | 0;
   let contract = req.body.contract;
+    let privateKey = wicc.PrivateKey.fromWIF(key)
+    let account = privateKey.toAddress().toString()
 
   try {
     let userInfo = await rest.account.getAccount(account);
@@ -187,8 +189,6 @@ router.get('/end', async (req, res) => {
     let txBody = util.createTx(userInfo.data.regid, block.data, contract, value, message);
 
     console.log(txBody);
-
-    var privateKey = wicc.PrivateKey.fromWIF('Y9x4iimB6AYp3b73nRzaJHHZdEHcwb1A61LVyvpXVTgfbbdUj172')
 
     let rawTx = wiccApi.createSignTransaction(privateKey, 4, txBody);
 

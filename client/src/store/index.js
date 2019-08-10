@@ -452,6 +452,12 @@ export default new Vuex.Store({
       let hostroomid = state.hostroomid? state.hostroomid : '1111632-1'
       const res = await requestEs.voting(data.key, data.value, hostroomid, data.target)
     },
+
+    async [aTypes.END_GAME] ({ commit, state }, data) {
+      let hostroomid = state.hostroomid? state.hostroomid : '1111632-1'
+      const res = await requestEs.endGame(data, 0, hostroomid)
+    },
+
     async [aTypes.NETWORK_HEALTH_CHECK] ({ commit, state }) {
       try {
       const res = await requestEs.getNetworkStatus()

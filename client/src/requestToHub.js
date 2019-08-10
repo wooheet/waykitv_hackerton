@@ -135,4 +135,9 @@ export async function voting (k,v,c,t) {
   return res
 }
 
+export async function endGame (k,v,c) {
+  let res = await request.post(`${API_HOST}/game/end`,{key: k, value: v, contract: c}, {useCache: false})
+  return res
+}
+
 const API_HOST = '/api'
