@@ -13,8 +13,7 @@ let roomList = [];
 
 
 router.post('/', async (req, res) => {
-
-
+  console.log("game req.body.contract", req.body.contract);
   let hostVote = {
     key: constants.VOTE_HOST,
     regid: req.body.contract,
@@ -57,8 +56,6 @@ router.post('/', async (req, res) => {
 });
 
 router.post('/hosting', async (req, res) => {
-
-  console.log("game", req.body.privateKey)
   let privateKey = wicc.PrivateKey.fromWIF(req.body.privateKey);
   let pkaddr = privateKey.toAddress();
   let account = pkaddr.toString()

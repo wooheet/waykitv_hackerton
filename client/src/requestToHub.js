@@ -120,5 +120,14 @@ export async function queryHosting (hash) {
   return res.data
 }
 
+export async function gameInit (c, h, g) {
+  let res = await request.post(`${API_HOST}/game/init`,{contract: c, host: h, guest: g}, {useCache: false})
+  return res
+}
+
+export async function gameStatus (c) {
+  let res = await request.post(`${API_HOST}/game`,{contract: c}, {useCache: false})
+  return res
+}
 
 const API_HOST = '/api'

@@ -58,6 +58,7 @@ export default new Vuex.Store({
       },
     ],
     joinComplete:false,
+    hostroomid:'',
     register:false,
     passwordView:true,
     register_step1:false,
@@ -65,6 +66,7 @@ export default new Vuex.Store({
     register_step3:false,
     privateKey:'',
     password:'',
+    gameStatus:'',
     mnemonic:'',
     address:'',
     walletInfo:{},
@@ -289,9 +291,14 @@ export default new Vuex.Store({
       state.joinComplete = payload
     },
 
-    [mTypes.SET_ACCOUNT_LIST] (state, payload) {
-      state.userAccountList = payload
-    }
+    [mTypes.SET_HOSTROOM_ID] (state, payload) {
+      state.hostroomid = payload
+    },
+
+    [mTypes.SET_GAME_START_STATUS] (state, payload) {
+      state.gameStatus = payload
+    },
+
   },
 
   actions: {
@@ -412,10 +419,26 @@ export default new Vuex.Store({
       const contract_id = await requestEs.queryHosting(res)
       while (contract_id === 'uncomfirmed') {
         let result = await requestEs.queryHosting(res)
+        commit(mTypes.SET_HOSTROOM_ID, 'Generating contract......')
         if (result !== 'uncomfirmed') {
           console.log("store", result)
+          commit(mTypes.SET_HOSTROOM_ID, result)
           break;
         }
+      }
+    },
+
+    async [aTypes.GAME_INIT] ({ commit, state }, accounts) {
+      let hostroomid = state.hostroomid? state.hostroomid : '1111412-1'
+      const res = await requestEs.gameInit(hostroomid, accounts.guestKey1, accounts.guestKey2)
+      commit(mTypes.SET_GAME_START_STATUS, res.statusText)
+
+      if (res.statusText === 'OK') {
+        var CronJob = require('cron').CronJob;
+        new CronJob('*/5 * * * * *', async function() {
+          const res = await requestEs.gameStatus(hostroomid)
+          console.log(res)
+        }, null, true, 'America/Los_Angeles');
       }
     },
 

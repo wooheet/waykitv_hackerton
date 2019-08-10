@@ -118,6 +118,36 @@
                   </v-form>
                   <v-btn round v-on:click="hosting()" flat class="white--text">
                     CREATE HOSTING ROOM</v-btn>
+                  <span class="title font-weight-medium mb-2 ml-3 white--text">{{hostroomid}}</span>
+                </v-flex>
+                <v-flex mb-5>
+                  <v-flex>
+                    <v-form @submit.prevent="submit">
+                      <v-text-field
+                        dark
+                        v-model="guestKey1"
+                        class="guestKey"
+                        counter="130"
+                        hide-details
+                        placeholder="Address"
+                        @click:append="submit"
+                      ></v-text-field>
+                    </v-form>
+                    <v-form @submit.prevent="submit">
+                      <v-text-field
+                        dark
+                        v-model="guestKey2"
+                        class="guestKey"
+                        counter="130"
+                        hide-details
+                        placeholder="Address"
+                        @click:append="submit"
+                      ></v-text-field>
+                    </v-form>
+                  </v-flex>
+                  <v-btn round v-on:click="gameStart()" flat class="white--text">
+                    GAME START</v-btn>
+                  <span class="title font-weight-medium mb-2 ml-3 white--text">{{gameStatus}}</span>
                 </v-flex>
                 <v-flex mb-5>
                   <v-form @submit.prevent="submit">
@@ -156,7 +186,6 @@
             <v-flex mb-0 >
               <v-card class="transaction-history">
                 <span class="title font-weight-medium ml-3 white--text mb-5">USER TEST KEY LIST</span>
-                <!--<span class="title font-weight-medium ml-3 white&#45;&#45;text">{{account}}</span>-->
                 <v-layout row
                           wrap
                           v-for="(value, props) in account" :key="props"
@@ -184,7 +213,8 @@ import {
   LOGIN_STEP1,
   REGISTER_STEP1,
   REGISTER_STEP2,
-  REGISTER_STEP3
+  REGISTER_STEP3,
+  GAME_INIT
 } from '../store/action-types'
 
 export default {
@@ -205,7 +235,9 @@ export default {
       'register_step1',
       'register_step2',
       'register_step3',
-      'joinComplete'
+      'joinComplete',
+      'hostroomid',
+      'gameStatus'
     ]),
 
     ...mapState({
@@ -224,6 +256,8 @@ export default {
       hostingKey:'',
       votingKey:'',
       endKey:'',
+      guestKey1:'',
+      guestKey2:'',
     }
   },
   methods: {
@@ -253,6 +287,14 @@ export default {
 
     hosting () {
       this.$store.dispatch(HOSTING, this.hostingKey)
+    },
+
+    gameStart () {
+      let accounts = {
+        guestKey1: this.guestKey1,
+        guestKey2: this.guestKey2
+      }
+      this.$store.dispatch(GAME_INIT, accounts)
     }
 
 
@@ -289,11 +331,11 @@ export default {
   }
   .transaction-history {
     background-color: rgba(66, 66, 66, 0.3);
-    height: 700px;
+    height: 750px;
   }
   .network-info {
     background-color: rgba(66, 66, 66, 0.3);
-    height: 700px;
+    height: 750px;
   }
   .refresh {
     margin-top: -2px;
@@ -314,6 +356,11 @@ export default {
     margin-left:15px;
     margin-bottom:20px;
     width:350px;
+  }
+  .guestKey {
+    margin-left:15px;
+    margin-bottom:20px;
+    width:300px;
   }
 </style>
 
