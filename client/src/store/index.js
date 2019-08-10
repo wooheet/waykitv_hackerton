@@ -434,7 +434,7 @@ export default new Vuex.Store({
     },
 
     async [aTypes.GAME_INIT] ({ commit, state }, accounts) {
-      let hostroomid = state.hostroomid? state.hostroomid : '1111632-1'
+      let hostroomid = state.hostroomid? state.hostroomid : '1111891-1'
       const res = await requestEs.gameInit(hostroomid, accounts.guestKey1, accounts.guestKey2)
       commit(mTypes.SET_GAME_START_STATUS, res.statusText)
 
@@ -449,12 +449,12 @@ export default new Vuex.Store({
     },
 
     async [aTypes.VOTING] ({ commit, state }, data) {
-      let hostroomid = state.hostroomid? state.hostroomid : '1111632-1'
+      let hostroomid = state.hostroomid? state.hostroomid : '1111891-1'
       const res = await requestEs.voting(data.key, data.value, hostroomid, data.target)
     },
 
     async [aTypes.END_GAME] ({ commit, state }, data) {
-      let hostroomid = state.hostroomid? state.hostroomid : '1111632-1'
+      let hostroomid = state.hostroomid? state.hostroomid : '1111891-1'
       const res = await requestEs.endGame(data, 0, hostroomid)
     },
 
