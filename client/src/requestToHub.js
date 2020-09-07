@@ -1,15 +1,5 @@
-// import request from 'axios'
-
 import axios from 'axios'
-import {cacheAdapterEnhancer, throttleAdapterEnhancer} from 'axios-extensions';
-
-// const request = axios.create({
-//   auth: {
-//   username: 'ygg',
-//     password: 'ygg1234'
-//   }
-//
-// });
+import {cacheAdapterEnhancer} from 'axios-extensions';
 
 export async function getAllData() {
   let res = await request.get(`${API_HOST}`, {useCache: false})
@@ -24,20 +14,18 @@ const request = axios.create({
   headers: {
     'Cache-Control': 'no-cache'
   },
-  // adapter: throttleAdapterEnhancer(cacheAdapterEnhancer(axios.defaults.adapter), { threshold: 2 * 1000 })
   adapter: cacheAdapterEnhancer(axios.defaults.adapter, { enabledByDefault: true, cacheFlag: 'useCache'})
 });
 
 export async function getBranch () {
   let branch = await request.get(`${API_HOST}/branches`)
-  let result = {
+  return {
     Name: Object.values(branch.data)[0].name,
     Symbol: Object.values(branch.data)[0].symbol,
     Property: Object.values(branch.data)[0].property,
     Description: Object.values(branch.data)[0].description,
     Contracts: Object.values(branch.data)[0].contracts,
   }
-  return result
 }
 
 export function search(hash) {
@@ -116,7 +104,6 @@ export async function hosting (pk) {
 
 export async function queryHosting (hash) {
   let res = await request.get(`${API_HOST}/game/number/${hash}`, {useCache: false})
-  // let res = await request.get(`${API_HOST}/game/number/d4b016f469e7d3f46927c131869f603180995909f7db79cbf6fe21f134919d1b`, {useCache: false})
   return res.data
 }
 

@@ -22,8 +22,6 @@ app.listen(config.port, config.ip, function () {
   logger.info("Environment\t | \t" + chalk.underline.bold(process.env.NODE_ENV));
   logger.info("IP\t\t | \t" + config.ip);
   logger.info("Port\t\t | \t" + config.port);
-  // logger.info("Database:\t\t" + config.db.uri);
-  // logger.info("Redis:\t\t" + (config.redis.enabled ? config.redis.uri : "Disabled"));
   logger.info("");
   if (process.env.NODE_ENV !== "process") {
     logger.info("==============================================================================================");

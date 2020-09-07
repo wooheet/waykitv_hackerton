@@ -1,7 +1,4 @@
-const config = require('../config');
 const logger = require('../core/logger');
-
-const _ = require('lodash');
 
 const client = require('./axios/axios');
 
@@ -74,15 +71,9 @@ let tx = {
           logger.error(error);
         })
     })
-
-
-
   },
 
   faucet: async (account) => {
-
-    //https://faucet.wiccdev.org/testnet/getwicc/wWiX77hWwebSyz3nURguAfMHx5zBeAwgT3
-
     http.request(options(account), function (response) {
       handleResponse(response);
     }).end();
