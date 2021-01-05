@@ -14,7 +14,7 @@
     "build": "cross-env NODE_ENV=production node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "echarts": "^4.2.1",
     "material-design-icons-iconfont": "^5.0.1",
     "sockjs-client": "^1.1.5",
